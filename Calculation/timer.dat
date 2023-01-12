@@ -1,0 +1,122 @@
+
+Host: Surface
+
+Timers On : Sun Jan  1 11:04:12 2023
+Timers Off: Sun Jan  1 11:04:17 2023
+
+Wall Time:        4.37 seconds
+
+                                                       Time (seconds)
+Module                                       User      System        Wall        Calls
+
+--------------------------------------------------------------------------------------
+
+**************************************************************************************
+
+Host: Surface
+
+Timers On : Sun Jan  1 11:33:41 2023
+Timers Off: Sun Jan  1 11:41:12 2023
+
+Wall Time:      451.45 seconds
+
+                                                       Time (seconds)
+Module                                       User      System        Wall        Calls
+
+--------------------------------------------------------------------------------------
+
+**************************************************************************************
+
+Host: Surface
+
+Timers On : Sun Jan  1 14:05:07 2023
+Timers Off: Sun Jan  1 14:27:24 2023
+
+Wall Time:     1336.97 seconds
+
+                                                       Time (seconds)
+Module                                       User      System        Wall        Calls
+
+--------------------------------------------------------------------------------------
+
+**************************************************************************************
+
+Host: Surface
+
+Timers On : Sun Jan  1 14:50:16 2023
+Timers Off: Sun Jan  1 14:52:44 2023
+
+Wall Time:      147.64 seconds
+
+                                                       Time (seconds)
+Module                                       User      System        Wall        Calls
+
+--------------------------------------------------------------------------------------
+
+**************************************************************************************
+
+Host: Surface
+
+Timers On : Sun Jan  1 14:52:48 2023
+Timers Off: Sun Jan  1 17:04:35 2023
+
+Wall Time:     7906.94 seconds
+
+                                                       Time (seconds)
+Module                                       User      System        Wall        Calls
+DFH: sparsity prep                  :      0.067u      0.000s      0.079w      2 calls
+DFH: initialize()                   :      0.167u      0.000s      0.138w      2 calls
+DFH: AO Construction                :      0.017u      0.000s      0.007w      2 calls
+DFH: AO-Met. Contraction            :      0.000u      0.000s      0.001w      2 calls
+HF: Form core H                     :      0.017u      0.000s      0.094w      2 calls
+HF: Form S/X                        :      0.000u      0.000s      0.001w      2 calls
+HF: Guess                           :      0.633u      0.000s      0.421w      2 calls
+SAD Guess                           :      0.600u      0.000s      0.395w      2 calls
+HF: Form G                          :      0.000u      0.000s      0.010w     18 calls
+JK: D                               :      0.000u      0.000s      0.000w     18 calls
+JK: USO2AO                          :      0.000u      0.000s      0.002w     18 calls
+JK: JK                              :      0.000u      0.000s      0.006w     18 calls
+DFH: compute_JK()                   :      0.000u      0.000s      0.005w     18 calls
+DFH: Grabbing AOs                   :      0.000u      0.000s      0.000w     18 calls
+DFH: compute_J                      :      0.000u      0.000s      0.002w     18 calls
+DFH: compute_K                      :      0.000u      0.000s      0.003w     18 calls
+JK: AO2USO                          :      0.000u      0.000s      0.001w     18 calls
+HF: Form F                          :      0.000u      0.000s      0.000w     18 calls
+HF: Form D                          :      0.000u      0.000s      0.000w     18 calls
+HF: DIIS                            :      0.017u      0.000s      0.033w     16 calls
+DIISManager::add_entry              :      0.000u      0.000s      0.017w     16 calls
+DIISManager::extrapolate            :      0.000u      0.000s      0.004w     16 calls
+bMatrix setup                       :      0.000u      0.000s      0.001w     16 calls
+bMatrix pseudoinverse               :      0.000u      0.000s      0.002w     16 calls
+New vector                          :      0.000u      0.000s      0.001w     16 calls
+HF: Form C                          :      0.017u      0.000s      0.002w     16 calls
+
+--------------------------------------------------------------------------------------
+DFH: sparsity prep                  :      0.067u      0.000s      0.079w      2 calls
+DFH: initialize()                   :      0.167u      0.000s      0.138w      2 calls
+| DFH: AO Construction              :      0.017u      0.000s      0.007w      2 calls
+| DFH: AO-Met. Contraction          :      0.000u      0.000s      0.001w      2 calls
+HF: Form core H                     :      0.017u      0.000s      0.094w      2 calls
+HF: Form S/X                        :      0.000u      0.000s      0.001w      2 calls
+HF: Guess                           :      0.633u      0.000s      0.421w      2 calls
+| SAD Guess                         :      0.600u      0.000s      0.395w      2 calls
+HF: Form G                          :      0.000u      0.000s      0.010w     18 calls
+| JK: D                             :      0.000u      0.000s      0.000w     18 calls
+| JK: USO2AO                        :      0.000u      0.000s      0.002w     18 calls
+| JK: JK                            :      0.000u      0.000s      0.006w     18 calls
+| | DFH: compute_JK()               :      0.000u      0.000s      0.005w     18 calls
+| | | DFH: Grabbing AOs             :      0.000u      0.000s      0.000w     18 calls
+| | | DFH: compute_J                :      0.000u      0.000s      0.002w     18 calls
+| | | DFH: compute_K                :      0.000u      0.000s      0.003w     18 calls
+| JK: AO2USO                        :      0.000u      0.000s      0.001w     18 calls
+HF: Form F                          :      0.000u      0.000s      0.000w     18 calls
+HF: Form D                          :      0.000u      0.000s      0.000w     18 calls
+HF: DIIS                            :      0.017u      0.000s      0.033w     16 calls
+| DIISManager::add_entry            :      0.000u      0.000s      0.017w     16 calls
+| DIISManager::extrapolate          :      0.000u      0.000s      0.004w     16 calls
+| | bMatrix setup                   :      0.000u      0.000s      0.001w     16 calls
+| | bMatrix pseudoinverse           :      0.000u      0.000s      0.002w     16 calls
+| | New vector                      :      0.000u      0.000s      0.001w     16 calls
+HF: Form C                          :      0.017u      0.000s      0.002w     16 calls
+
+**************************************************************************************
