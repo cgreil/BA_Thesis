@@ -65,3 +65,10 @@ def lambdify_sympy(expression, symbol):
      and using lambdify to create a python expression from it"""
     return lambdify(expression, symbol)
 
+
+
+
+
+
+
+
