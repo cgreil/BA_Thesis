@@ -6,6 +6,7 @@ import json
 import sympy
 from sympy import *
 from typing import *
+from scipy.integrate import quad
 
 
 def get_sto3g_json(elemnumber: int):
@@ -135,3 +136,5 @@ if __name__ == '__main__':
     be_orbital_2p = get_STO(be_2p_coeffs, be_2p_exponents)
     print("Beryllium 2p MO:")
     print(be_orbital_2p)
+    #Symbolic integration with sympy
+    print(integrate(be_orbital_2p, (Symbol('r'),0,100)))
