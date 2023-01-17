@@ -1,3 +1,4 @@
+import pyscf
 from pyscf import gto
 from pyscf.gto.basis import parse_gaussian
 
@@ -22,6 +23,7 @@ def create_beh2():
     }
 
     mol.spin = 0
+    mol.build()
     #mol.symmetry = True
     #mol.symmetry_subgroup = 'DooH'
 
@@ -39,9 +41,29 @@ def print_beh2_HF_energy():
 
 
 
+def get_1e_integrals(molecule):
+    """Function to calculate the 1-electron integrals in PySCF and returning the respective values as NxN matrix
+    for a given molecule"""
+    h1e = molecule.intor("int1e_kin", aosym='s1') + molecule.intor("int1e_nuc", aosym='s1')
+    return h1e
+
+
+def get_2e_integrals(molecule):
+    """Function to calculate the 2-electron integrals in PySCF and returning the respective values as NxN matrix
+    for a given molecule"""
+    h2e = h2e = molecule.intor("int2e", aosym='s1')
+    return h2e
+
+
 if __name__ == '__main__':
+
+    beh2 = create_beh2()
+
     #print reference
     print_beh2_HF_energy()
-
+    print("1-Electron interaction integrals (kinetic + nuclear)")
+    print(len(get_1e_integrals(beh2)))
+    print("2-Electron interaction integrals:")
+    print(len(get_2e_integrals(beh2)))
 
 
