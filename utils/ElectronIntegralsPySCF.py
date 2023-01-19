@@ -55,11 +55,30 @@ def get_2e_integrals(molecule):
     return h2e
 
 
+def dim2_from_dim4(array):
+    """Util function taking a NxNxNxN array and returning a N^2xN^2 array in the following scheme:
+    Element [p,q,r,s] in the 4 dim array will be found at position [N*p + r, N*q + s] in the 2 dimensional array.
+    For example, element at [1,2,4,8] for N = 14 will be at [14*1 + 4, 14*2+8] i.e. [18,36].
+
+    Useful for printing to files/tables."""
+    N = array.shape[0]
+    matrix = np.zeros((N**2,N**2))
+
+    for p in range(N):
+        for q in range(N):
+            for r in range(N):
+                for s in range(N):
+                    matrix[N*p + r][N*q + s] = array[p][q][r][s]
+    return matrix
+
+
+
+
 if __name__ == '__main__':
 
     beh2 = create_beh2()
 
-    #print reference
+    #print reference unrestricted hartree fock energy
     #print_beh2_HF_energy()
     print("1-Electron interaction integrals (kinetic + nuclear)")
     eri1 = np.array(get_1e_integrals(beh2))
@@ -71,6 +90,8 @@ if __name__ == '__main__':
     #reshape eri2 so it can be written to file
     N = len(eri2)
     np.savetxt('eri1', eri1, fmt='%4.6f', delimiter=' ')
-    np.savetxt('eri2', eri2.reshape((N*N,N*N)), fmt='%4.6f', delimiter=' ')
+    #np.savetxt('eri2', eri2.reshape((N*N,N*N)), fmt='%4.6f', delimiter=' ')
+    #Use custom reshape function to have well defined order
+    np.savetxt('eri2_test', dim2_from_dim4(eri2), fmt='%4.6f', delimiter=' ')
 
 
