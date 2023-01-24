@@ -92,6 +92,6 @@ if __name__ == '__main__':
     np.savetxt('eri1', eri1, fmt='%4.6f', delimiter=' ')
     #np.savetxt('eri2', eri2.reshape((N*N,N*N)), fmt='%4.6f', delimiter=' ')
     #Use custom reshape function to have well defined order
-    np.savetxt('eri2_test', dim2_from_dim4(eri2), fmt='%4.6f', delimiter=' ')
+    np.savetxt('eri2', dim2_from_dim4(eri2), fmt='%4.6f', delimiter=' ')
 
 

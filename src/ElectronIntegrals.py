@@ -12,12 +12,6 @@ def integrand(r):
 """Module for calculating one- and two- electron interaction integrals """
 
 
-if __name__ == '__main__':
-    #numeric integration with scipy
-    print(quad(integrand, 0, 1))
-    print("Hi")
-
-
 def int_1e(basis:list):
     """Takes a list of MO basis functions of size N and returns a NxN matrix describing the
     one-electron interaction between the electrons in the respective MOs"""

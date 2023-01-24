@@ -1,9 +1,6 @@
-import numpy as np
-import qiskit
 from qiskit import QuantumCircuit
-from qiskit.quantum_info.operators import Operator, Pauli
-from typing import *
 
+from src.evolution.Operators import *
 
 def get_circuit(N: int):
     '''returns a circuit with N qubit registers'''
@@ -29,7 +26,6 @@ def add_creation_op(circ: QuantumCircuit, i: int):
 
     return circ
 
-
 def add_annihilation_op(circ:QuantumCircuit, i:int):
     '''For a given circuit and index i, appends gates to the circuit that
     correspond to a annihilation operator at qubit with index i. Preserves the antisymmetry
@@ -46,6 +42,28 @@ def add_annihilation_op(circ:QuantumCircuit, i:int):
         circ.z(k)
 
     return circ
+
+
+def electronic_hamiltonian(circ:QuantumCircuit):
+    """Function taking a circuit and appending unitary gates representing the electronic Hamiltonian.
+    Afterwards returns the edited circuit again.
+
+    The Hamiltonian will be split into single electron interaction and double electron interaction."""
+    #TODO
+    return circ
+
+
+def append_single_interaction_hamiltonian(N:int, i:int, j:int):
+    """Function which creates a circuit representing the single interaction hamiltonian between qubits at position i and
+     qubit at position j onto the given circuit"""
+
+
+    #Diagonal elements
+
+    #Off-Diagonal elements
+
+    return
+
 
 
 
