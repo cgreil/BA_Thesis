@@ -26,9 +26,9 @@ class Q2Evol:
         #calculate size of subcircuit
         N = None
         if (id1 < id2):
-            N = id2 - id1
+            N = id2 - id1 + 1
         else:
-            N = id1 - id2
+            N = id1 - id2 + 1
 
         circ = qiskit.QuantumCircuit(N)
 

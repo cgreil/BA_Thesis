@@ -17,3 +17,4 @@ def evol_y():
 def evol_z():
     matrix = -(np.pi / 4) * Z
     return PauliEvolutionGate(matrix)
+
