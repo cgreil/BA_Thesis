@@ -1,5 +1,5 @@
 """Module intended for full creation of the VQE circuit by putting all required building blocks together."""
-from src.evolution.Q2Evol import *
+from src.evolution.TwoQubitEvol import *
 
 
 def compileVQECircuit():

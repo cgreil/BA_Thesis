@@ -1,6 +1,6 @@
 from qiskit import QuantumCircuit
 
-from src.evolution.Operators import *
+from src.evolution.BasicGates import *
 
 def get_circuit(N: int):
     '''returns a circuit with N qubit registers'''
@@ -20,11 +20,9 @@ def append_single_interaction_hamiltonian(N:int, i:int, j:int):
     """Function which creates a circuit representing the single interaction hamiltonian between qubits at position i and
      qubit at position j onto the given circuit"""
 
-
     #Diagonal elements
 
     #Off-Diagonal elements
-
     return
 
 
