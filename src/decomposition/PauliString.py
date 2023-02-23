@@ -10,8 +10,8 @@ class PauliString:
     # tuple of single qubit pauli operators
     pauli_tuple: tuple
 
-    # Pauli List is a tuple containing either Pauli objects or LinearPauliCombination objects
-    def __init__(self, pauli_tuple: tuple[Pauli | LinearPauliCombination], weight):
+    # Pauli List is a tuple containing a variable amount of either Pauli objects or LinearPauliCombination objects
+    def __init__(self, pauli_tuple: tuple[Pauli | LinearPauliCombination, ...], weight):
         self.weight = weight
         self.pauli_tuple = pauli_tuple
 
