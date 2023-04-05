@@ -1,4 +1,5 @@
 from qiskit import QuantumCircuit
+from qiskit.opflow import Operato
 
 from src.evolution.BasicGates import *
 

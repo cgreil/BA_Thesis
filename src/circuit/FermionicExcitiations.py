@@ -13,10 +13,9 @@ def SingleQuFermExcitation(circuit: QuantumCircuit, i: int, j: int, theta: float
     orbital with index i to orbital with index j. It is assumed that i < j."""
 
     N = circuit.num_qubits
-
-    # make sure that indices fit inside the circuit
+    circuit
     assert (N > i)
-    assert (N > j)
+    # make sure that ind (N > j)
     # assert order of indices
     assert (i <= j)
 
