@@ -17,43 +17,96 @@ from qiskit.opflow import PauliSumOp
 from qiskit.quantum_info import SparsePauliOp
 from qiskit.quantum_info import PauliList
 from typing import List
-def generate_pauli_sum(num_qubits: int, weights:List[List[float]]):
+
+
+def generate_pauli_sum(num_qubits: int, weights: List[List[float]]):
     """Function which returns the PauliSumOp for the whole single electron fermionic hamiltonian."""
 
 
-def generate_diagonal_paulis(num_qubits: int, i: int, weights:List[List[float]]):
+def generate_diagonal_paulis(num_qubits: int, i: int, weights: np.ndarray[float, float]):
     """Generates the sparse pauli operator resulting from the diagonal elements of the hamiltonian"""
 
     # initialize empty pauli list and coeff array
-    PauliList = []
+    pauli_list = []
     coeffs = []
 
     for i in range(num_qubits):
-        coeff = weights[i][i]
+
+        # store coeff
+        coeffs[i] = 1 / 2 * weights[i, i]
+
         # identity pauli string
         pauli_I_list = ['I' for _ in range(num_qubits)]
-        PauliList.append(pauli_I_list)
+        pauli_list.append(pauli_I_list)
         # already multiplies with 1/2
-        coeffs[i] = 1/2 * weights[i]
 
-        #Z pauli string
-        pauli_Z_list = ['I' for _ in range((i-1))]
+        # Z pauli string
+        pauli_Z_list = ['I' for _ in range((i - 1))]
         pauli_Z_list.append('Z')
-        pauli_Z_list.extend(['I' for _ in range(i+1, num_qubits)])
-        PauliList.append(pauli_Z_list)
+        pauli_Z_list.extend(['I' for _ in range(i + 1, num_qubits)])
+        pauli_list.append(pauli_Z_list)
 
     # finally create the Sparse Pauli Operator
-    SparsePauliOp(PauliList, coeffs=np.array(coeffs))
+    SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
+
+
+def generate_offdiagonal_paulis(num_qubits: int, weights: np.ndarray[float, float]):
+    # initialize the pauli list and coeff list
+    pauli_list = []
+    coeffs = []
+
+    # iterate over combinations where i < j
+    for j in range(num_qubits):
+        for i in range(j):
+            coeff = weights[i, j]
+            pauli_X_string = pauli_X_string_builder(i, j, num_qubits)
+            pauli_Y_string = pauli_Y_string_builder(i, j, num_qubits)
 
 
 
-def generate_offdiagonal_paulis():
 
-    return
+def pauli_Y_string_builder(i, j, num_qubits):
+
+    """Creates a string corresponding to a transform on the Hilbert space for num_qubits qubits, with transformation
+        Y iff qubit index k is i or j
+        Z iff qubit index i < k < j
+        I otherwise
+    """
+
+    # all qubits below I have identity transformation
+    pauli_Y_list = ['I' for _ in range(i - 1)]
+    # apply X on qubit i
+    pauli_Y_list.append('Y')
+    # between i and j, apply Z transformations
+    pauli_Y_list.extend(['Y' for _ in range(i, j)])
+    # apply another X on qubit j
+    pauli_Y_list.append('Y')
+    # fill with identities
+    pauli_Y_list.extend(['I' for _ in range(j + 1, num_qubits)])
+
+    return pauli_Y_list
 
 
+def pauli_X_string_builder(i, j, num_qubits):
 
+    """Creates a string corresponding to a transform on the Hilbert space for num_qubits qubits, with transformation
+        X iff qubit index k is i or j
+        Z iff qubit index i < k < j
+        I otherwise
+    """
 
+    # all qubits below I have identity transformation
+    pauli_X_list = ['I' for _ in range(i - 1)]
+    # apply X on qubit i
+    pauli_X_list.append('X')
+    # between i and j, apply Z transformations
+    pauli_X_list.extend(['Z' for _ in range(i, j)])
+    # apply another X on qubit j
+    pauli_X_list.append('X')
+    # fill with identities
+    pauli_X_list.extend(['I' for _ in range(j + 1, num_qubits)])
+
+    return pauli_X_list
 
 
 
