@@ -7,6 +7,7 @@ of the totally antisymmetric tensor. Used for the creation of PauliStrings for t
 import numpy as np
 from typing import Dict
 
+
 def determine_ordering(index_dict: Dict[str, int]):
     """Function which takes a dictionary with
     <key> ... name of the index
@@ -19,9 +20,18 @@ def determine_ordering(index_dict: Dict[str, int]):
     has the second-largest value.
     """
     sorted_dict = _sort_dict_by_values(index_dict)
+    # Notice that this index_list [a, b, c, ... ] corresponds to the assignments alpha = a, beta = b, gamma = c, ...
+    # within the paper
+    size_list = []
+    # since insertion order is preserved, can convert the keyset to list to do get position values:
+    index_list = list(index_dict.keys())
+    # iterate over indexes
+    for elem in index_list:
+        # find index in sorted list, add position to size_list
+        position = list(sorted_dict.keys()).index(elem)
+        size_list.append(position)
 
-
-    pass
+    return size_list
 
 
 def _sort_dict_by_values(dict: Dict[str, int]):
