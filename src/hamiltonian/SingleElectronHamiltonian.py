@@ -76,7 +76,7 @@ def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], F
     return SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
 
 
-def _pauli_Y_string_builder(i, j, num_qubits):
+def _pauli_Y_string_builder(i:int, j:int, num_qubits:int):
     """Creates a string corresponding to a transform on the Hilbert space for num_qubits qubits, with transformation
         Y iff qubit index k is i or j
         Z iff qubit index i < k < j
@@ -97,7 +97,7 @@ def _pauli_Y_string_builder(i, j, num_qubits):
     return pauli_Y_list
 
 
-def _pauli_X_string_builder(i, j, num_qubits):
+def _pauli_X_string_builder(i:int, j:int, num_qubits:int):
     """Creates a string corresponding to a transform on the Hilbert space for num_qubits qubits, with transformation
         X iff qubit index k is i or j
         Z iff qubit index i < k < j
