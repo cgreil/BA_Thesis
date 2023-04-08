@@ -62,7 +62,7 @@ def _generate_offdiagonal_paulis(num_qubits: int, weights: np.ndarray[float, flo
     for j in range(num_qubits):
         for i in range(j):
             # add coefficient
-            coeffs[coeff_index] = weights[i, j]
+            coeffs[coeff_index] = -(1/2) * weights[i, j]
             coeff_index = coeff_index + 1
 
             pauli_X_string = _pauli_X_string_builder(i, j, num_qubits)
