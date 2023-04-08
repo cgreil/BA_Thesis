@@ -5,10 +5,10 @@ of the totally antisymmetric tensor. Used for the creation of PauliStrings for t
 """
 
 import numpy as np
-from typing import Dict
+from typing import Dict, List
 
 
-def determine_ordering(index_dict: Dict[str, int]):
+def _determine_ordering(index_dict: Dict[str, int]):
     """Function which takes a dictionary with
     <key> ... name of the index
     <value> ... the value of the index
@@ -22,16 +22,37 @@ def determine_ordering(index_dict: Dict[str, int]):
     sorted_dict = _sort_dict_by_values(index_dict)
     # Notice that this index_list [a, b, c, ... ] corresponds to the assignments alpha = a, beta = b, gamma = c, ...
     # within the paper
-    size_list = []
+    ordering = []
     # since insertion order is preserved, can convert the keyset to list to do get position values:
     index_list = list(index_dict.keys())
     # iterate over indexes
     for elem in index_list:
-        # find index in sorted list, add position to size_list
+        # find index in sorted list, add <position> to ordering
         position = list(sorted_dict.keys()).index(elem)
-        size_list.append(position)
+        ordering.append(position)
 
-    return size_list
+    return ordering
+
+
+
+
+def _levi_civita_epsilon(ordering: List[int]):
+    """For a list of integers representing an ordering, calculate the Levi-Civita epsilon
+    https://en.wikipedia.org/wiki/Levi-Civita_symbol. Required to calculate the sign.
+    Note that in the many-bodies paper it is simply denoted by epsilon.
+    """
+
+
+def is_even_permutation(ordering: List[int]):
+    """Function which takes a list of integers and determines whether it is an even permuatation of
+    the list containing the same elements sorted in ascending order"""
+    # Taken from https://python-forum.io/thread-11603.html
+    perm_count = 0
+    for i, num in enumerate(ordering, start=1):
+        # count how many are smaller
+        perm_count += sum(num > num2 for num2 in ordering[i:])
+    return not perm_count % 2
+
 
 
 def _sort_dict_by_values(dict: Dict[str, int]):
