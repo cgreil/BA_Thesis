@@ -84,17 +84,17 @@ def _pauli_Y_string_builder(i:int, j:int, num_qubits:int):
     """
 
     # all qubits below I have identity transformation
-    pauli_Y_list = ['I' for _ in range(i - 1)]
+    pauli_string = ['I' for _ in range(i - 1)]
     # apply X on qubit i
-    pauli_Y_list.append('Y')
+    pauli_string.append('Y')
     # between i and j, apply Z transformations
-    pauli_Y_list.extend(['Y' for _ in range(i, j)])
+    pauli_string.extend(['Y' for _ in range(i, j)])
     # apply another X on qubit j
-    pauli_Y_list.append('Y')
+    pauli_string.append('Y')
     # fill with identities
-    pauli_Y_list.extend(['I' for _ in range(j + 1, num_qubits)])
+    pauli_string.extend(['I' for _ in range(j + 1, num_qubits)])
 
-    return pauli_Y_list
+    return pauli_string
 
 
 def _pauli_X_string_builder(i:int, j:int, num_qubits:int):
@@ -105,14 +105,14 @@ def _pauli_X_string_builder(i:int, j:int, num_qubits:int):
     """
 
     # all qubits below I have identity transformation
-    pauli_X_list = ['I' for _ in range(i - 1)]
+    pauli_string = ['I' for _ in range(i - 1)]
     # apply X on qubit i
-    pauli_X_list.append('X')
+    pauli_string.append('X')
     # between i and j, apply Z transformations
-    pauli_X_list.extend(['Z' for _ in range(i, j)])
+    pauli_string.extend(['Z' for _ in range(i, j)])
     # apply another X on qubit j
-    pauli_X_list.append('X')
+    pauli_string.append('X')
     # fill with identities
-    pauli_X_list.extend(['I' for _ in range(j + 1, num_qubits)])
+    pauli_string.extend(['I' for _ in range(j + 1, num_qubits)])
 
-    return pauli_X_list
+    return pauli_string
