@@ -46,6 +46,34 @@ def _generate_diagonal_paulis(num_qubits: int, weights: NDArray[Shape['4'], Floa
     return SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
 
 
+def generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['4'], Float]):
+    """Function which creates the Sum of Pauli strings which results from the mapping of the offdiagonal elements
+    of the two electron fermionic interaction Hamiltonian.
+
+    Notice that there are three distinct groups of interaction types that one has to consider:
+    I   ... i < j < l < k
+    II  ... i < l < j < k
+    III ... i < l < k < j
+    """
+
+    # j and k iterate over whole range, whereas i and l only up to j and k respectively
+    for j in range(num_qubits):
+        for i in range(j):
+            if i == j:
+                # is equal to a diagonal element
+                continue
+            for k in range(num_qubits):
+                for l in range(k):
+                    if l == k:
+                        # also equal to a diagonal element (up to index swapping)
+                        continue
+                    # use method shown in the paper to determine the case
+                    index_dict = {'i': i, 'j': j, 'l': l, 'k': k}
+
+    # create empty lists for paulis and coeffs
+    pass
+
+
 def _identity_string_builder(num_qubits: int):
     # pass none to get identity string back
     return pauli_string_from_dict(num_qubits, None)
@@ -57,4 +85,3 @@ def _pauli_single_Z_string_builder(num_qubits: int, i: int):
 
 def _pauli_double_Z_string_builder(num_qubits: int, i: int, j: int):
     return pauli_string_from_dict(num_qubits, {i: 'Z', j: 'Z'})
-

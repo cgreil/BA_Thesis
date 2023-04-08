@@ -63,6 +63,9 @@ def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], F
     # iterate over combinations where i < j
     for j in range(num_qubits):
         for i in range(j):
+            if i == j:
+                # equal to a diagonal element
+                continue
             # add coefficient
             coeffs[coeff_index] = -(1 / 2) * weights[i, j]
             coeff_index = coeff_index + 1
