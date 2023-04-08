@@ -32,13 +32,12 @@ def generate_diagonal_paulis(num_qubits: int, i: int, weights: np.ndarray[float,
 
     for i in range(num_qubits):
 
-        # store coeff
+        # store coeff,
         coeffs[i] = 1 / 2 * weights[i, i]
 
         # identity pauli string
         pauli_I_list = ['I' for _ in range(num_qubits)]
         pauli_list.append(pauli_I_list)
-        # already multiplies with 1/2
 
         # Z pauli string
         pauli_Z_list = ['I' for _ in range((i - 1))]
