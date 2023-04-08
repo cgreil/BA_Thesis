@@ -32,7 +32,7 @@ def generate_diagonal_paulis(num_qubits: int, i: int, weights: np.ndarray[float,
 
     for i in range(num_qubits):
 
-        # store coeff,
+        # store coeff
         coeffs[i] = 1 / 2 * weights[i, i]
 
         # identity pauli string
@@ -46,7 +46,7 @@ def generate_diagonal_paulis(num_qubits: int, i: int, weights: np.ndarray[float,
         pauli_list.append(pauli_Z_list)
 
     # finally create the Sparse Pauli Operator
-    SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
+    return SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
 
 
 def generate_offdiagonal_paulis(num_qubits: int, weights: np.ndarray[float, float]):
@@ -54,12 +54,23 @@ def generate_offdiagonal_paulis(num_qubits: int, weights: np.ndarray[float, floa
     pauli_list = []
     coeffs = []
 
+    coeff_index = 0
+
     # iterate over combinations where i < j
     for j in range(num_qubits):
         for i in range(j):
-            coeff = weights[i, j]
+            # add coefficient
+            coeffs[coeff_index] = weights[i, j]
+            coeff_index = coeff_index + 1
+
             pauli_X_string = pauli_X_string_builder(i, j, num_qubits)
             pauli_Y_string = pauli_Y_string_builder(i, j, num_qubits)
+            # add strings to the list of all
+            pauli_list.append(pauli_X_string)
+            pauli_list.append(pauli_Y_string)
+
+    # create the Sparse Pauli Operator
+    return SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
 
 
 
