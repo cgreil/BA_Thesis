@@ -41,9 +41,17 @@ def _levi_civita_epsilon(ordering: List[int]):
     https://en.wikipedia.org/wiki/Levi-Civita_symbol. Required to calculate the sign.
     Note that in the many-bodies paper it is simply denoted by epsilon.
     """
+    # if duplicates are in the list, i.e. when the set representation has smaller cardinality, return 0
+    if len(set(ordering)) != len(ordering):
+        return 0
+    elif _is_even_permutation(ordering):
+        return 1
+    else:
+        return -1
 
 
-def is_even_permutation(ordering: List[int]):
+
+def _is_even_permutation(ordering: List[int]):
     """Function which takes a list of integers and determines whether it is an even permuatation of
     the list containing the same elements sorted in ascending order"""
     # Taken from https://python-forum.io/thread-11603.html
