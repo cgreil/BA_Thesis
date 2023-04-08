@@ -17,6 +17,8 @@ from nptyping import Shape, NDArray, Float
 from qiskit.opflow import PauliSumOp
 from qiskit.quantum_info import SparsePauliOp
 
+from ..util.PauliStringCreation import pauli_string_from_dict
+
 
 def generate_pauli_sum(num_qubits: int, weights: NDArray[Shape['2'], Float]):
     """Function which returns the full PauliSumOp for the whole single electron fermionic hamiltonian."""
@@ -40,13 +42,11 @@ def _generate_diagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], Floa
         coeffs[i] = 1 / 2 * weights[i, i]
 
         # identity pauli string
-        pauli_I_list = ['I' for _ in range(num_qubits)]
+        pauli_I_list = pauli_string_from_dict(num_qubits, None)
         pauli_list.append(pauli_I_list)
 
         # Z pauli string
-        pauli_Z_list = ['I' for _ in range((i - 1))]
-        pauli_Z_list.append('Z')
-        pauli_Z_list.extend(['I' for _ in range(i + 1, num_qubits)])
+        pauli_Z_list = pauli_string_from_dict(num_qubits, {i: 'Z'})
         pauli_list.append(pauli_Z_list)
 
     # finally create the Sparse Pauli Operator
@@ -87,17 +87,12 @@ def _pauli_Y_string_builder(i: int, j: int, num_qubits: int):
         I otherwise
     """
 
-    # all qubits below I have identity transformation
-    pauli_string = ['I' for _ in range(i - 1)]
-    # apply X on qubit i
-    pauli_string.append('Y')
-    # between i and j, apply Z transformations
-    pauli_string.extend(['Y' for _ in range(i, j)])
-    # apply another X on qubit j
-    pauli_string.append('Y')
-    # fill with identities
-    pauli_string.extend(['I' for _ in range(j + 1, num_qubits)])
+    pauli_dict = {i: 'Y'}
+    for k in range(i+1, j):
+        pauli_dict[k] = 'Z'
+    pauli_dict[j] = 'Y'
 
+    pauli_string = pauli_string_from_dict(num_qubits, pauli_dict)
     return pauli_string
 
 
@@ -108,15 +103,10 @@ def _pauli_X_string_builder(i: int, j: int, num_qubits: int):
         I otherwise
     """
 
-    # all qubits below I have identity transformation
-    pauli_string = ['I' for _ in range(i - 1)]
-    # apply X on qubit i
-    pauli_string.append('X')
-    # between i and j, apply Z transformations
-    pauli_string.extend(['Z' for _ in range(i, j)])
-    # apply another X on qubit j
-    pauli_string.append('X')
-    # fill with identities
-    pauli_string.extend(['I' for _ in range(j + 1, num_qubits)])
+    pauli_dict = {i: 'X'}
+    for k in range(i+1, j):
+        pauli_dict[k] = 'Z'
+    pauli_dict[j] = 'X'
 
+    pauli_string = pauli_string_from_dict(num_qubits, pauli_dict)
     return pauli_string
