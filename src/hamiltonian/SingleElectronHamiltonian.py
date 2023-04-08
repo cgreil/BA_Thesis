@@ -12,12 +12,13 @@ Pauli Gates.
 """
 
 import numpy as np
+from nptyping import Shape, NDArray, Float
 
 from qiskit.opflow import PauliSumOp
 from qiskit.quantum_info import SparsePauliOp
 
 
-def generate_pauli_sum(num_qubits: int, weights: np.ndarray[float, float]):
+def generate_pauli_sum(num_qubits: int, weights: NDArray[Shape['2'], Float]):
     """Function which returns the full PauliSumOp for the whole single electron fermionic hamiltonian."""
     diagonal_sparse_paulis = _generate_diagonal_paulis(num_qubits, weights)
     offdiagonal_sparse_paulis = _generate_offdiagonal_paulis(num_qubits, weights)
@@ -26,7 +27,7 @@ def generate_pauli_sum(num_qubits: int, weights: np.ndarray[float, float]):
 
     return PauliSumOp(complete_sparse_paulis)
 
-def _generate_diagonal_paulis(num_qubits: int, weights: np.ndarray[float, float]):
+def _generate_diagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], Float]):
     """Generates the sparse pauli operator resulting from the diagonal elements of the hamiltonian"""
 
     # initialize empty pauli list and coeff array
@@ -51,7 +52,7 @@ def _generate_diagonal_paulis(num_qubits: int, weights: np.ndarray[float, float]
     return SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
 
 
-def _generate_offdiagonal_paulis(num_qubits: int, weights: np.ndarray[float, float]):
+def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], Float]):
     # initialize the pauli list and coeff list
     pauli_list = []
     coeffs = []
