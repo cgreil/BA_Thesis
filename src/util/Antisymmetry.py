@@ -34,8 +34,6 @@ def _determine_ordering(index_dict: Dict[str, int]):
     return ordering
 
 
-
-
 def _levi_civita_epsilon(ordering: List[int]):
     """For a list of integers representing an ordering, calculate the Levi-Civita epsilon
     https://en.wikipedia.org/wiki/Levi-Civita_symbol. Required to calculate the sign.
@@ -50,7 +48,6 @@ def _levi_civita_epsilon(ordering: List[int]):
         return -1
 
 
-
 def _is_even_permutation(ordering: List[int]):
     """Function which takes a list of integers and determines whether it is an even permuatation of
     the list containing the same elements sorted in ascending order"""
@@ -60,7 +57,6 @@ def _is_even_permutation(ordering: List[int]):
         # count how many are smaller
         perm_count += sum(num > num2 for num2 in ordering[i:])
     return not perm_count % 2
-
 
 
 def _sort_dict_by_values(dict: Dict[str, int]):

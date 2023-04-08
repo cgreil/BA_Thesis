@@ -9,6 +9,7 @@ from qiskit.opflow import PauliSumOp
 from qiskit.quantum_info import SparsePauliOp
 
 from ..util.PauliStringCreation import pauli_string_from_dict
+from ..util.IndexGroup import *
 
 
 def generate_pauli_sum(num_qubits: int, weights: NDArray[Shape['4'], Float]):
@@ -69,6 +70,11 @@ def generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['4'], Fl
                         continue
                     # use method shown in the paper to determine the case
                     index_dict = {'i': i, 'j': j, 'l': l, 'k': k}
+                    # determine the group of interaction pairs
+                    interaction_group = determine_group(i, j, k, l)
+
+
+
 
     # create empty lists for paulis and coeffs
     pass
