@@ -5,7 +5,7 @@ The single particle interaction Hamiltonian H1 can be described as
 $$H_1 = \sum_i h_{ii} a_i^{\dagger} a_i + \sum_{i < j} h_{ij} (a_i^{\dagger} a_j + a_j^{\dagger} a_i)$$
 where $a, a^\dagger$ denote the annihilation and creation operators, respectively.
 
-This module returns a PauliSumOp
+This module returns the SparsePauliOp
 (see https://qiskit.org/documentation/stubs/qiskit.opflow.primitive_ops.PauliSumOp.html#qiskit.opflow.primitive_ops.PauliSumOp)
 which lets one combine weights with sparse Pauli Operators, where Pauli Operators can be Tensor products of
 Pauli Gates.
@@ -15,15 +15,18 @@ import numpy as np
 
 from qiskit.opflow import PauliSumOp
 from qiskit.quantum_info import SparsePauliOp
-from qiskit.quantum_info import PauliList
-from typing import List
 
 
-def generate_pauli_sum(num_qubits: int, weights: List[List[float]]):
-    """Function which returns the PauliSumOp for the whole single electron fermionic hamiltonian."""
+def generate_pauli_sum(num_qubits: int, weights: np.ndarray[float, float]):
+    """Function which returns the full PauliSumOp for the whole single electron fermionic hamiltonian."""
+    diagonal_sparse_paulis = generate_diagonal_paulis(num_qubits, weights)
+    offdiagonal_sparse_paulis = generate_offdiagonal_paulis(num_qubits, weights)
 
+    complete_sparse_paulis = diagonal_sparse_paulis.compose(offdiagonal_sparse_paulis)
 
-def generate_diagonal_paulis(num_qubits: int, i: int, weights: np.ndarray[float, float]):
+    return PauliSumOp(complete_sparse_paulis)
+
+def generate_diagonal_paulis(num_qubits: int, weights: np.ndarray[float, float]):
     """Generates the sparse pauli operator resulting from the diagonal elements of the hamiltonian"""
 
     # initialize empty pauli list and coeff array
@@ -31,7 +34,6 @@ def generate_diagonal_paulis(num_qubits: int, i: int, weights: np.ndarray[float,
     coeffs = []
 
     for i in range(num_qubits):
-
         # store coeff
         coeffs[i] = 1 / 2 * weights[i, i]
 
@@ -73,10 +75,7 @@ def generate_offdiagonal_paulis(num_qubits: int, weights: np.ndarray[float, floa
     return SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
 
 
-
-
 def pauli_Y_string_builder(i, j, num_qubits):
-
     """Creates a string corresponding to a transform on the Hilbert space for num_qubits qubits, with transformation
         Y iff qubit index k is i or j
         Z iff qubit index i < k < j
@@ -98,7 +97,6 @@ def pauli_Y_string_builder(i, j, num_qubits):
 
 
 def pauli_X_string_builder(i, j, num_qubits):
-
     """Creates a string corresponding to a transform on the Hilbert space for num_qubits qubits, with transformation
         X iff qubit index k is i or j
         Z iff qubit index i < k < j
@@ -117,6 +115,3 @@ def pauli_X_string_builder(i, j, num_qubits):
     pauli_X_list.extend(['I' for _ in range(j + 1, num_qubits)])
 
     return pauli_X_list
-
-
-
