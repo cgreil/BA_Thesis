@@ -2,7 +2,8 @@
 
 from typing import Dict
 
-def pauli_string_from_dict(num_qubits:int, non_identity: Dict[int, str]):
+
+def pauli_string_from_dict(num_qubits: int, non_identity: Dict[int, str] | None):
     """Creates a string representing a tensor product of Pauli matrices where all elements are I elements except the
     elements within the dict, where for a pair of (key, value), the pauli gate at position <key> has the identifier
      <value>."""

@@ -27,6 +27,7 @@ def generate_pauli_sum(num_qubits: int, weights: NDArray[Shape['2'], Float]):
 
     return PauliSumOp(complete_sparse_paulis)
 
+
 def _generate_diagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], Float]):
     """Generates the sparse pauli operator resulting from the diagonal elements of the hamiltonian"""
 
@@ -63,7 +64,7 @@ def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], F
     for j in range(num_qubits):
         for i in range(j):
             # add coefficient
-            coeffs[coeff_index] = -(1/2) * weights[i, j]
+            coeffs[coeff_index] = -(1 / 2) * weights[i, j]
             coeff_index = coeff_index + 1
 
             pauli_X_string = _pauli_X_string_builder(i, j, num_qubits)
@@ -76,7 +77,7 @@ def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], F
     return SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
 
 
-def _pauli_Y_string_builder(i:int, j:int, num_qubits:int):
+def _pauli_Y_string_builder(i: int, j: int, num_qubits: int):
     """Creates a string corresponding to a transform on the Hilbert space for num_qubits qubits, with transformation
         Y iff qubit index k is i or j
         Z iff qubit index i < k < j
@@ -97,7 +98,7 @@ def _pauli_Y_string_builder(i:int, j:int, num_qubits:int):
     return pauli_string
 
 
-def _pauli_X_string_builder(i:int, j:int, num_qubits:int):
+def _pauli_X_string_builder(i: int, j: int, num_qubits: int):
     """Creates a string corresponding to a transform on the Hilbert space for num_qubits qubits, with transformation
         X iff qubit index k is i or j
         Z iff qubit index i < k < j
