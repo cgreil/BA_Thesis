@@ -10,8 +10,13 @@ from qiskit.opflow import PauliSumOp
 from qiskit.quantum_info import SparsePauliOp
 
 from ..util.PauliStringCreation import pauli_string_from_dict
-from ..util.IndexGroup import *
+from ..util.InteractionGroup import *
+from ..util.Antisymmetry import levi_civita_epsilon, determine_ordering
 
+# Hardcoding the number of terms for the 2-electron interaction as a constant on the
+# module level. Also the list of special paulis
+NUMBER_TERMS_IN_2e_INTERACTION = 24
+LIST_OF_PAULIS_IN_2e_INTERACTION = ['XXXX', 'XXYY', 'XYXY', 'XYYX', 'YXXY', 'YXYX', 'YYXX', 'YYYY']
 
 def generate_pauli_sum(num_qubits: int, weights: NDArray[Shape['4'], Float]):
     pass
@@ -72,38 +77,39 @@ def generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['4'], Fl
                     # use method shown in the paper to determine the case
                     index_dict = {'i': i, 'j': j, 'l': l, 'k': k}
                     # determine the group of interaction pairs
-                    interaction_group = determine_group(i, j, k, l)
+                    interaction_group = determine_interaction_group(i, j, k, l)
+
 
     # create empty lists for paulis and coeffs
     pass
 
 
-def _build_string(num_qubits: int, index_group: IndexGroup, pauli_indices: List[int]):
+def _build_string(num_qubits: int, index_group: InteractionGroup, pauli_indices: List[int]):
     """ Build the 24-term Pauli string corresponding to a single summation term.
         In particular, each of the terms will have the form
         II...IAZZ...ZBCZZ...ZDII...I
         where A,B,C,D are from {X, Y} respectively.
-        The position of A, ..., D are s_alpha, ... , s_delta, where 
     """
     # pauli indices is the list [i, j, k, l]
-    s_alpha, s_beta, s_gamma, s_delta = _determine_positions(index_group, pauli_indices)
+    positions = _determine_positions(index_group, pauli_indices)
+    for i in range(NUMBER_TERMS_IN_2e_INTERACTION):
+        _pauli_quadra_term_builder(num_qubits, positions, )
 
 
 
 
-
-def _determine_positions(index_group: IndexGroup, pauli_indices: List[int]):
+def _determine_positions(index_group: InteractionGroup, pauli_indices: List[int]):
     # s_alpha will hold the position of the lowest, s_beta of the second lowest and so on
     # For 2 interaction pairs, only 4 indices
     assert (len(pauli_indices) == 4)
 
-    if index_group is IndexGroup.FIRST:
+    if index_group is InteractionGroup.FIRST:
         s_alpha, s_beta, s_gamma, s_delta = pauli_indices
         positions = (s_alpha, s_beta, s_gamma, s_delta)
-    elif index_group is IndexGroup.SECOND:
+    elif index_group is InteractionGroup.SECOND:
         s_alpha, s_gamma, s_beta, s_delta = pauli_indices
         positions = (s_alpha, s_beta, s_gamma, s_delta)
-    elif index_group is IndexGroup.THIRD:
+    elif index_group is InteractionGroup.THIRD:
         s_alpha, s_delta, s_beta, s_gamma = pauli_indices
         positions = (s_alpha, s_beta, s_gamma, s_delta)
     else:

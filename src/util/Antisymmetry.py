@@ -8,7 +8,7 @@ import numpy as np
 from typing import Dict, List
 
 
-def _determine_ordering(index_dict: Dict[str, int]):
+def determine_ordering(index_dict: Dict[str, int]):
     """Function which takes a dictionary with
     <key> ... name of the index
     <value> ... the value of the index
@@ -34,7 +34,7 @@ def _determine_ordering(index_dict: Dict[str, int]):
     return ordering
 
 
-def _levi_civita_epsilon(ordering: List[int]):
+def levi_civita_epsilon(ordering: List[int]):
     """For a list of integers representing an ordering, calculate the Levi-Civita epsilon
     https://en.wikipedia.org/wiki/Levi-Civita_symbol. Required to calculate the sign.
     Note that in the many-bodies paper it is simply denoted by epsilon.
