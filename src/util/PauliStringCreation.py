@@ -7,7 +7,7 @@ def pauli_string_from_dict(num_qubits: int, non_identity: Dict[int, str] | None)
     """Creates a string representing a tensor product of Pauli matrices where all elements are I elements except the
     elements within the dict, where for a pair of (key, value), the pauli gate at position <key> has the identifier
      <value>."""
-
+    # Standard is identity
     pauli_string = ['I' for _ in range(num_qubits)]
 
     if non_identity is None:

@@ -91,7 +91,8 @@ def _build_string(num_qubits: int, index_group: IndexGroup, pauli_indices: List[
 
 
 
-def _determine_positions(index_group, pauli_indices):
+
+def _determine_positions(index_group: IndexGroup, pauli_indices: List[int]):
     # s_alpha will hold the position of the lowest, s_beta of the second lowest and so on
     # For 2 interaction pairs, only 4 indices
     assert (len(pauli_indices) == 4)
@@ -123,3 +124,28 @@ def _pauli_single_Z_string_builder(num_qubits: int, i: int):
 
 def _pauli_double_Z_string_builder(num_qubits: int, i: int, j: int):
     return pauli_string_from_dict(num_qubits, {i: 'Z', j: 'Z'})
+
+# naming is hard :(
+def _pauli_quadra_term_builder(num_qubits: int, positions: List[int], paulis='IIII'):
+    """Utilizies pauli_string from dict to build a single sum  term for the 24 term interaction
+    hamiltonian.
+    paulis is a string of length 4 where each entry is either X or Y, the corresponding Pauli matrix
+    will then be inserted at the respective index given from the positions list"""
+    assert(len(positions) == 4)
+    assert(len(paulis) == 4)
+
+    pauli_dict = {}
+    # add the four 'main' pauli matrices
+    for position, pauli in zip(positions, paulis):
+        pauli_dict[position] = pauli
+
+    # add the asymmetry Z strings between s_alpha and s_beta aswell as between s_gamma and s_delta
+    s_alpha, s_beta, s_gamma, s_delta = positions
+    for i in range(s_alpha+1, s_beta):
+        pauli_dict[i] = 'Z'
+
+    for i in range(s_gamma+1, s_delta):
+        pauli_dict[i] = 'Z'
+
+    return pauli_string_from_dict(num_qubits, pauli_dict)
+
