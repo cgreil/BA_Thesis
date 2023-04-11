@@ -20,7 +20,7 @@ from qiskit.quantum_info import SparsePauliOp
 from ..util.PauliStringCreation import pauli_string_from_dict
 
 
-def generate_pauli_sum(num_qubits: int, weights: NDArray[Shape['2'], Float]):
+def generate_1e_hamiltonian(num_qubits: int, weights: NDArray[Shape['2'], Float]):
     """Function which returns the full PauliSumOp for the whole single electron fermionic hamiltonian."""
     diagonal_sparse_paulis = _generate_diagonal_paulis(num_qubits, weights)
     offdiagonal_sparse_paulis = _generate_offdiagonal_paulis(num_qubits, weights)

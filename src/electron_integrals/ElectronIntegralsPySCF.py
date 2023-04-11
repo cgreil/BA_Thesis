@@ -13,14 +13,11 @@ def create_beh2():
         H  0. 1. 0. 
         H  0. 0. 1. 
         '''
-    mol.unit='B' #B for Bohr
+    # B for Bohr referring to Bohr radius
+    mol.unit='B'
     mol.basis={
-        #For WSL interpreter use linux like paths
         'Be': parse_gaussian.load('/mnt/c/Users/cmose/PycharmProjects/BA/Calculation/resources/BeH2_basis_new.gbs', 'Be'),
         'H': parse_gaussian.load('/mnt/c/Users/cmose/PycharmProjects/BA/Calculation/resources/BeH2_basis_new.gbs', 'H')
-        #'Be': parse_gaussian.load('C:\\Users\\cmose\\PycharmProjects\\BA\\Calculation\\resources\\BeH2_basis.gbs', 'Be'),
-        #'H': parse_gaussian.load('/C:\\Users\\cmose\\PycharmProjects\\BA\\Calculation\\resources\\BeH2_basis.gbs', 'H')
-
     }
 
     mol.spin = 0

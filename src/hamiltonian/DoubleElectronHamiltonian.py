@@ -15,7 +15,7 @@ from ..util.Antisymmetry import levi_civita_epsilon, determine_ordering
 from ..resources.DoubleElectronInteractionData import DoubleElectronInteractionData
 
 
-def generate_pauli_sum(num_qubits: int, weights: NDArray[Shape['4'], Float]):
+def generate_2e_hamiltonian(num_qubits: int, weights: NDArray[Shape['4'], Float]):
     diagonal_pauli_op = _generate_diagonal_paulis(num_qubits, weights)
     offiagonal_pauli_op = _generate_offdiagonal_paulis(num_qubits, weights)
 
