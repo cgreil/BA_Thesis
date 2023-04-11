@@ -14,14 +14,15 @@ from ..util.InteractionGroup import *
 from ..util.Antisymmetry import levi_civita_epsilon, determine_ordering
 from ..resources.DoubleElectronInteractionData import DoubleElectronInteractionData
 
-# Hardcoding the number of terms for the 2-electron interaction as a constant on the
-# module level. Also the list of special paulis
-NUMBER_TERMS_IN_2e_INTERACTION = 24
-LIST_OF_PAULIS_IN_2e_INTERACTION = ['XXXX', 'XXYY', 'XYXY', 'XYYX', 'YXXY', 'YXYX', 'YYXX', 'YYYY']
-
 
 def generate_pauli_sum(num_qubits: int, weights: NDArray[Shape['4'], Float]):
-    pass
+    diagonal_pauli_op = _generate_diagonal_paulis(num_qubits, weights)
+    offiagonal_pauli_op = _generate_offdiagonal_paulis(num_qubits, weights)
+
+    # combine the pauli operators and return the final PauliSumOperator
+    complete_pauli_op = SparsePauliOp.sum([diagonal_pauli_op, offiagonal_pauli_op])
+
+    return PauliSumOp(complete_pauli_op)
 
 
 def _generate_diagonal_paulis(num_qubits: int, weights: NDArray[Shape['4'], Float]):
@@ -66,7 +67,7 @@ def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['4'], F
     """
 
     # initialize pauli string
-    excitation_string = SparsePauliOp(data=[])
+    interaction_strings = []
 
     # j and k iterate over whole range, whereas i and l only up to j and k respectively
     for j in range(num_qubits):
@@ -85,15 +86,15 @@ def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['4'], F
                     interaction_group = determine_interaction_group(i, j, k, l)
                     # Determine the ordering and from it, determine the result of the levi-citavi epsilon
                     ordering = determine_ordering(index_dict)
-                    levi_epsilon = levi_civita_epsilon(ordering)
+                    coeff = (1 / 8) * levi_civita_epsilon(ordering) * weights[i, j, k, l]
 
                     # Calculate the full pauli string for a single interaction
-                    pauli_string = _build_string(num_qubits, interaction_group, [i,j,k,l], coeff=levi_epsilon*(1/8))
-                    #construct the string for the full excitation
-                    excitation_string.expand(pauli_string)
+                    pauli_string = _build_string(num_qubits, interaction_group, [i, j, k, l],
+                                                 coeff=coeff)
+                    # construct the string for the full excitation
+                    interaction_strings.append(pauli_string)
 
-
-    # create empty lists for paulis and coeffs
+    excitation_string = SparsePauliOp.sum(interaction_strings)
     return excitation_string
 
 
@@ -105,17 +106,18 @@ def _build_string(num_qubits: int, interaction_group: InteractionGroup, pauli_in
     """
     # pauli indices is the list [i, j, k, l]
     positions = _determine_positions(interaction_group, pauli_indices)
-    string = SparsePauliOp(data=[])
+    substrings = []
 
     for term_index in range(DoubleElectronInteractionData.get_number_of_terms()):
         sign = DoubleElectronInteractionData.get_sign(interaction_group, term_index)
         term = _pauli_quadra_term_builder(num_qubits, positions,
                                           DoubleElectronInteractionData.get_pauli_list()[term_index])
-        substring = SparsePauliOp(data=term, coeffs=sign*coeff)
+        substring = SparsePauliOp(data=term, coeffs=sign * coeff)
         # add the operator to the whole thing
-        string.expand(substring)
+        substrings.append(substring)
 
-    return string
+    interaction_string = SparsePauliOp.sum(substrings)
+    return interaction_string
 
 
 def _determine_positions(interaction_group: InteractionGroup, pauli_indices: List[int]):

@@ -25,7 +25,7 @@ def generate_pauli_sum(num_qubits: int, weights: NDArray[Shape['2'], Float]):
     diagonal_sparse_paulis = _generate_diagonal_paulis(num_qubits, weights)
     offdiagonal_sparse_paulis = _generate_offdiagonal_paulis(num_qubits, weights)
 
-    complete_sparse_paulis = diagonal_sparse_paulis.compose(offdiagonal_sparse_paulis)
+    complete_sparse_paulis = SparsePauliOp.sum([diagonal_sparse_paulis, offdiagonal_sparse_paulis])
 
     return PauliSumOp(complete_sparse_paulis)
 
@@ -88,7 +88,7 @@ def _pauli_Y_string_builder(i: int, j: int, num_qubits: int):
     """
 
     pauli_dict = {i: 'Y'}
-    for k in range(i+1, j):
+    for k in range(i + 1, j):
         pauli_dict[k] = 'Z'
     pauli_dict[j] = 'Y'
 
@@ -104,7 +104,7 @@ def _pauli_X_string_builder(i: int, j: int, num_qubits: int):
     """
 
     pauli_dict = {i: 'X'}
-    for k in range(i+1, j):
+    for k in range(i + 1, j):
         pauli_dict[k] = 'Z'
     pauli_dict[j] = 'X'
 
