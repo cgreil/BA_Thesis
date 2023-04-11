@@ -4,6 +4,7 @@ Jordan-Wigner transformation.
 
 import numpy as np
 from nptyping import NDArray, Shape, Float
+from typing import List
 
 from qiskit.opflow import PauliSumOp
 from qiskit.quantum_info import SparsePauliOp
@@ -73,15 +74,46 @@ def generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['4'], Fl
                     # determine the group of interaction pairs
                     interaction_group = determine_group(i, j, k, l)
 
-
-
-
     # create empty lists for paulis and coeffs
     pass
 
 
+def _build_string(num_qubits: int, index_group: IndexGroup, pauli_indices: List[int]):
+    """ Build the 24-term Pauli string corresponding to a single summation term.
+        In particular, each of the terms will have the form
+        II...IAZZ...ZBCZZ...ZDII...I
+        where A,B,C,D are from {X, Y} respectively.
+        The position of A, ..., D are s_alpha, ... , s_delta, where 
+    """
+    # pauli indices is the list [i, j, k, l]
+    s_alpha, s_beta, s_gamma, s_delta = _determine_positions(index_group, pauli_indices)
+
+
+
+
+def _determine_positions(index_group, pauli_indices):
+    # s_alpha will hold the position of the lowest, s_beta of the second lowest and so on
+    # For 2 interaction pairs, only 4 indices
+    assert (len(pauli_indices) == 4)
+
+    if index_group is IndexGroup.FIRST:
+        s_alpha, s_beta, s_gamma, s_delta = pauli_indices
+        positions = (s_alpha, s_beta, s_gamma, s_delta)
+    elif index_group is IndexGroup.SECOND:
+        s_alpha, s_gamma, s_beta, s_delta = pauli_indices
+        positions = (s_alpha, s_beta, s_gamma, s_delta)
+    elif index_group is IndexGroup.THIRD:
+        s_alpha, s_delta, s_beta, s_gamma = pauli_indices
+        positions = (s_alpha, s_beta, s_gamma, s_delta)
+    else:
+        raise ValueError("This ordering of indices is not allowed!")
+
+    assert(positions is not None)
+    return positions
+
+
 def _identity_string_builder(num_qubits: int):
-    # pass none to get identity string back
+    # pass none to get identity string for dimension num_qubits
     return pauli_string_from_dict(num_qubits, None)
 
 
