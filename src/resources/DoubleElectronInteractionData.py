@@ -7,7 +7,7 @@ class DoubleElectronInteractionData:
     """static Class for storing the speficic configuration of pauli string terms for the 24 term
     sum in the double electron hamiltonian"""
 
-    _number_of_terms = 24
+    _number_of_terms = 8
     _pauli_list = ['XXXX', 'XXYY', 'XYXY', 'XYYX', 'YXXY', 'YXYX', 'YYXX', 'YYYY']
     _sign_lookup_matrix = [[1, 1, 1], [-1, 1, 1], [1, -1, 1], [1, 1, -1], [1, 1, -1], [1, -1, 1], [-1, 1, 1], [1, 1, 1]]
 
@@ -17,7 +17,7 @@ class DoubleElectronInteractionData:
 
     @classmethod
     def get_pauli_list(cls):
-        return DoubleElectronInteractionData._pauli_list
+        return cls._pauli_list
 
     @classmethod
     def get_sign(cls, interaction_group: InteractionGroup, term_number: int):
