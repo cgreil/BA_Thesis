@@ -1,17 +1,18 @@
 """File constructing the fermionic interaction hamiltonian in second quantization.
 In this current approximation, single-electron-interaction hamiltonian and double-electron-interaction
- Hamiltonian parts are considered. """
+Hamiltonian parts are considered.
+ """
 
-from nptyping import NDArray, Float, Shape
-from qiskit.opflow import PauliSumOp
+from nptyping import NDArray, Float, Shape, ndarray
+from qiskit.opflow import PauliSumOp, OperatorBase
 
 from SingleElectronHamiltonian import generate_1e_hamiltonian
 from DoubleElectronHamiltonian import generate_2e_hamiltonian
 
 
 class FermionicHamiltonian:
-
-    hamiltonian = None
+    # Hamiltonian object which will be stored as PauliSumOp
+    hamiltonian: PauliSumOp = None
 
     def fermionic_hamiltonian(self, molecule):
         """Creates the Fermionic excitation Hamiltonian for the given molecule.
@@ -22,9 +23,9 @@ class FermionicHamiltonian:
         """
         pass
 
-
-    # TODO: Probably set private later
-    def compose_hamiltonian(self, num_qubits: int, weights_1e: NDArray[Shape['2'], Float], weights_2e: NDArray[Shape['4'], Float]):
+    # TODO: Set private later
+    def calculate_hamiltonian(self, num_qubits: int, weights_1e: NDArray[Shape['2'], Float],
+                              weights_2e: NDArray[Shape['4'], Float]):
         """From the number of qubits and the weight matrices for the respective interactions, form the hamiltonian
         and return it as qiskit PauliSumOp data structure."""
         single_electron_hamiltonian = generate_1e_hamiltonian(num_qubits, weights_1e)
@@ -32,5 +33,23 @@ class FermionicHamiltonian:
 
         self.hamiltonian = single_electron_hamiltonian.add(double_electron_hamiltonian)
 
+    def get_hamiltonian(self) -> PauliSumOp:
+        """Returns the PauliSumOp object"""
+        if self.hamiltonian is None:
+            raise ValueError("Hamiltonian is NoneObject")
+        else:
+            return self.hamiltonian
 
+    def get_matrix(self) -> ndarray:
+        """Returns the matrix representation of the hamiltonian"""
+        if self.hamiltonian is None:
+            raise ValueError("Hamiltonian is NoneObject")
+        else:
+            return self.hamiltonian.to_matrix()
 
+    def exponential(self) -> OperatorBase:
+        """Returns a CircuitOperator equivalent to the exponentiation of the Hamiltonian"""
+        if self.hamiltonian is None:
+            raise ValueError("Hamiltonian is NoneObject")
+        else:
+            return self.hamiltonian.exp_i()
