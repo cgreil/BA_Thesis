@@ -65,6 +65,9 @@ def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['4'], F
     III ... i < l < k < j
     """
 
+    # initialize pauli string
+    excitation_string = SparsePauliOp(data=[])
+
     # j and k iterate over whole range, whereas i and l only up to j and k respectively
     for j in range(num_qubits):
         for i in range(j):
@@ -80,12 +83,21 @@ def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['4'], F
                     index_dict = {'i': i, 'j': j, 'l': l, 'k': k}
                     # determine the group of interaction pairs
                     interaction_group = determine_interaction_group(i, j, k, l)
+                    # Determine the ordering and from it, determine the result of the levi-citavi epsilon
+                    ordering = determine_ordering(index_dict)
+                    levi_epsilon = levi_civita_epsilon(ordering)
+
+                    # Calculate the full pauli string for a single interaction
+                    pauli_string = _build_string(num_qubits, interaction_group, [i,j,k,l], coeff=levi_epsilon*(1/8))
+                    #construct the string for the full excitation
+                    excitation_string.expand(pauli_string)
+
 
     # create empty lists for paulis and coeffs
-    pass
+    return excitation_string
 
 
-def _build_string(num_qubits: int, interaction_group: InteractionGroup, pauli_indices: List[int]):
+def _build_string(num_qubits: int, interaction_group: InteractionGroup, pauli_indices: List[int], coeff=1):
     """ Build the 24-term Pauli string corresponding to a single summation term.
         In particular, each of the terms will have the form
         II...IAZZ...ZBCZZ...ZDII...I
@@ -99,7 +111,7 @@ def _build_string(num_qubits: int, interaction_group: InteractionGroup, pauli_in
         sign = DoubleElectronInteractionData.get_sign(interaction_group, term_index)
         term = _pauli_quadra_term_builder(num_qubits, positions,
                                           DoubleElectronInteractionData.get_pauli_list()[term_index])
-        substring = SparsePauliOp(data=term, coeffs=sign)
+        substring = SparsePauliOp(data=term, coeffs=sign*coeff)
         # add the operator to the whole thing
         string.expand(substring)
 
