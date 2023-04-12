@@ -1,6 +1,10 @@
 import unittest
+import numpy as np
+
+from qiskit.quantum_info import SparsePauliOp
 
 from src.fermion_interaction.SingleFermionicInteraction import _pauli_X_string_builder as build
+from src.fermion_interaction.SingleFermionicInteraction import generate_diagonal_paulis as diag
 
 
 class TestSingleFermionicInteraction(unittest.TestCase):
@@ -38,4 +42,20 @@ class TestSingleFermionicInteraction(unittest.TestCase):
         with self.assertRaises(ValueError):
             build(3, 2, 1)
 
+    def test_diagonal_pauli_generator_2qubit(self):
+        num_qubits = 2
+        coeffs_sample = np.array([[0.3, 1], [3.4, 8.2]])
+        # np.repeat(x, n) creates a new list, where each x is repeated n times
+        correct_coeffs = np.repeat(np.array([coeffs_sample[k, k] * 1 / 2 for k in range(num_qubits)]), 2)
+        correct_op = SparsePauliOp(['II', 'ZI', 'II', 'IZ'], coeffs=correct_coeffs)
+        result = diag(2, coeffs_sample)
+        self.assertEquals(result, correct_op)
 
+    def test_diagonal_pauli_generator_3qubit(self):
+        num_qubits = 3
+        coeffs_sample = np.array([[2.2, 1.0, 3.2], [8.9, 4.1, 0.98], [0.63, 2.2, 0.82]])
+        correct_coeffs = np.repeat(np.array([coeffs_sample[k, k] * 1 / 2 for k in range(num_qubits)]), 2)
+        correct_op = SparsePauliOp(['III', 'ZII', 'III', 'IZI', 'III', 'IIZ'], coeffs=correct_coeffs)
+
+        result = diag(3, coeffs_sample)
+        self.assertEquals(result, correct_op)

@@ -12,15 +12,19 @@ def generate_diagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Sha
     pauli_list = []
     coeffs = []
 
+
     for i in range(num_qubits):
         # store coeff
-        coeffs[i] = 1 / 2 * interaction_integrals[i, i]
+        coeff = (1/2) * interaction_integrals[i, i]
+        # append coeff twice, since for every diagonal element there will be two pauli strings added
+        coeffs.extend([coeff, coeff])
 
-        # identity pauli string
+        # I pauli string
         pauli_I_list = pauli_string_from_dict(num_qubits, None)
         pauli_list.append(pauli_I_list)
 
-        # Z pauli string
+        # Z pauli string    # finally create the Sparse Pauli Operator
+
         pauli_Z_list = pauli_string_from_dict(num_qubits, {i: 'Z'})
         pauli_list.append(pauli_Z_list)
 
@@ -35,7 +39,7 @@ def generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray[
 
     coeff_index = 0
 
-    # iterate over combinations where i < j
+    # iterate over combinations where i < j_builder
     for j in range(num_qubits):
         for i in range(j):
             if i == j:
