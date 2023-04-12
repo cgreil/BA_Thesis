@@ -12,6 +12,9 @@ def generate_diagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Sha
     pauli_list = []
     coeffs = []
 
+    assert(num_qubits > 0)
+    assert(interaction_integrals.shape == (num_qubits, num_qubits))
+
 
     for i in range(num_qubits):
         # store coeff

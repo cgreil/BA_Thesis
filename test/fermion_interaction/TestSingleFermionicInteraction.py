@@ -49,7 +49,7 @@ class TestSingleFermionicInteraction(unittest.TestCase):
         correct_coeffs = np.repeat(np.array([coeffs_sample[k, k] * 1 / 2 for k in range(num_qubits)]), 2)
         correct_op = SparsePauliOp(['II', 'ZI', 'II', 'IZ'], coeffs=correct_coeffs)
         result = diag(2, coeffs_sample)
-        self.assertEquals(result, correct_op)
+        self.assertEqual(result, correct_op)
 
     def test_diagonal_pauli_generator_3qubit(self):
         num_qubits = 3
@@ -58,4 +58,28 @@ class TestSingleFermionicInteraction(unittest.TestCase):
         correct_op = SparsePauliOp(['III', 'ZII', 'III', 'IZI', 'III', 'IIZ'], coeffs=correct_coeffs)
 
         result = diag(3, coeffs_sample)
-        self.assertEquals(result, correct_op)
+        self.assertEqual(result, correct_op)
+
+    def test_diagonal_pauli_generator_2qubit_wrong_order(self):
+        num_qubits = 2
+        coeffs_sample = np.array([[0.3, 1], [3.4, 8.2]])
+        # np.repeat(x, n) creates a new list, where each x is repeated n times
+        correct_coeffs = np.repeat(np.array([coeffs_sample[k, k] * 1 / 2 for k in range(num_qubits)]), 2)
+        # note that IZ and II are swapped to what they should be
+        correct_op = SparsePauliOp(['II', 'ZI', 'IZ', 'II'], coeffs=correct_coeffs)
+        result = diag(2, coeffs_sample)
+        self.assertNotEqual(result, correct_op)
+
+    def test_diagonal_pauli_generator_wrong_coeff_matrix_size(self):
+        num_qubits = 2
+        coeffs_sample = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+        with self.assertRaises(AssertionError):
+            diag(num_qubits, coeffs_sample)
+
+    def test_diagonal_pauli_generator_wrong_coeff_matrix_shape(self):
+        num_qubits = 2
+        coeffs_sample = np.array([1, 2, 3, 4])
+        with self.assertRaises(AssertionError):
+            diag(num_qubits, coeffs_sample)
+
+
