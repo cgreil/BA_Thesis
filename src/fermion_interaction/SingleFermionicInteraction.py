@@ -45,7 +45,7 @@ def generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray[
             coeffs[coeff_index] = -(1 / 2) * interaction_integrals[i, j]
             coeff_index = coeff_index + 1
 
-            pauli_X_string = _pauli_X_string_builder(i, j, num_qubits)
+            pauli_X_string = _pauli_X_string_builder(num_qubits, i, j)
             pauli_Y_string = _pauli_Y_string_builder(i, j, num_qubits)
             # add strings to the list of all
             pauli_list.append(pauli_X_string)
@@ -71,7 +71,7 @@ def _pauli_Y_string_builder(i: int, j: int, num_qubits: int):
     return pauli_string
 
 
-def _pauli_X_string_builder(i: int, j: int, num_qubits: int):
+def _pauli_X_string_builder(num_qubits: int, i: int, j: int):
     """Creates a string corresponding to a transform on the Hilbert space for num_qubits qubits, with transformation
         X iff qubit index k is i or j
         Z iff qubit index i < k < j

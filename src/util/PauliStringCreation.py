@@ -22,4 +22,4 @@ def pauli_string_from_dict(num_qubits: int, non_identity: Dict[int, str] | None)
             else:
                 pauli_string[key] = identifier
 
-    return pauli_string
+    return ''.join(pauli_string)
