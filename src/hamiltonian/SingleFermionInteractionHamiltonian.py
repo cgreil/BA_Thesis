@@ -16,13 +16,13 @@ from nptyping import Shape, NDArray, Float
 from qiskit.opflow import PauliSumOp
 from qiskit.quantum_info import SparsePauliOp
 
-from ..fermion_interaction.SingleFermionicInteraction import _generate_diagonal_paulis, _generate_offdiagonal_paulis
+from ..fermion_interaction.SingleFermionicInteraction import generate_diagonal_paulis, generate_offdiagonal_paulis
 
 
 def generate_1e_hamiltonian(num_qubits: int, weights: NDArray[Shape['2'], Float]):
     """Function which returns the full PauliSumOp for the whole single electron fermionic hamiltonian."""
-    diagonal_sparse_paulis = _generate_diagonal_paulis(num_qubits, weights)
-    offdiagonal_sparse_paulis = _generate_offdiagonal_paulis(num_qubits, weights)
+    diagonal_sparse_paulis = generate_diagonal_paulis(num_qubits, weights)
+    offdiagonal_sparse_paulis = generate_offdiagonal_paulis(num_qubits, weights)
 
     complete_sparse_paulis = SparsePauliOp.sum([diagonal_sparse_paulis, offdiagonal_sparse_paulis])
 

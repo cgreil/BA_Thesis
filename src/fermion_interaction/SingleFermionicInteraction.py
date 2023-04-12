@@ -5,7 +5,7 @@ from qiskit.quantum_info import SparsePauliOp
 from src.util.PauliStringCreation import pauli_string_from_dict
 
 
-def _generate_diagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], Float]):
+def generate_diagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Shape['2'], Float]):
     """Generates the sparse pauli operator resulting from the diagonal elements of the hamiltonian"""
 
     # initialize empty pauli list and coeff array
@@ -14,7 +14,7 @@ def _generate_diagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], Floa
 
     for i in range(num_qubits):
         # store coeff
-        coeffs[i] = 1 / 2 * weights[i, i]
+        coeffs[i] = 1 / 2 * interaction_integrals[i, i]
 
         # identity pauli string
         pauli_I_list = pauli_string_from_dict(num_qubits, None)
@@ -28,7 +28,7 @@ def _generate_diagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], Floa
     return SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
 
 
-def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], Float]):
+def generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Shape['2'], Float]):
     # initialize the pauli list and coeff list
     pauli_list = []
     coeffs = []
@@ -42,7 +42,7 @@ def _generate_offdiagonal_paulis(num_qubits: int, weights: NDArray[Shape['2'], F
                 # equal to a diagonal element
                 continue
             # add coefficient
-            coeffs[coeff_index] = -(1 / 2) * weights[i, j]
+            coeffs[coeff_index] = -(1 / 2) * interaction_integrals[i, j]
             coeff_index = coeff_index + 1
 
             pauli_X_string = _pauli_X_string_builder(i, j, num_qubits)

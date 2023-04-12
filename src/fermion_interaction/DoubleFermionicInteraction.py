@@ -69,7 +69,7 @@ def _pauli_quadra_term_builder(num_qubits: int, positions: List[int], paulis='II
     return pauli_string_from_dict(num_qubits, pauli_dict)
 
 
-def _generate_diagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Shape['4'], Float]):
+def generate_diagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Shape['4'], Float]):
     """Function which generates the Sum of Pauli strings which results off the mapping
     of the diagonal elements of the Two electron fermionic interaction Hamiltonian.
     Diagonal in this sense refers to the situation that for an index set ijkl, pairwaise indices
@@ -100,7 +100,7 @@ def _generate_diagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Sh
     return SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
 
 
-def _generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Shape['4'], Float]):
+def generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Shape['4'], Float]):
     """Function which creates the Sum of Pauli strings which results from the mapping of the offdiagonal elements
     of the two electron fermionic interaction Hamiltonian.
 
@@ -110,9 +110,8 @@ def _generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray
     III ... i < l < k < j
     """
 
-    # initialize pauli string
+    # initialize pauli string list
     interaction_strings = []
-
 
     # j and k iterate over whole range, whereas i and l only up to j and k respectively
     for j in range(num_qubits):
@@ -131,7 +130,8 @@ def _generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray
                     interaction_group = determine_interaction_group(i, j, k, l)
                     # Determine the ordering and from it, determine the result of the levi-citavi epsilon
                     ordering = determine_ordering(index_dict)
-                    coeff = (1 / 8) * levi_civita_epsilon(ordering) * interaction_integrals[i, j, k, l]
+                    # - 1/8 and the l-c-epsilon stem from the perservation of asymmetry
+                    coeff = (-1) * (1 / 8) * levi_civita_epsilon(ordering) * interaction_integrals[i, j, k, l]
 
                     # Calculate the full pauli string for a single interaction
                     pauli_string = _build_24_term_string(num_qubits, interaction_group, [i, j, k, l],
