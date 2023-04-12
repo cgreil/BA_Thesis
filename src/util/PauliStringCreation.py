@@ -8,18 +8,22 @@ def pauli_string_from_dict(num_qubits: int, non_identity: Dict[int, str] | None)
     elements within the dict, where for a pair of (key, value), the pauli gate at position <key> has the identifier
      <value>."""
     # Standard is identity
-    pauli_string = ['I' for _ in range(num_qubits)]
+    pauli_list = ['I' for _ in range(num_qubits)]
 
     if non_identity is None:
-        return pauli_string
+        return ''.join(pauli_list)
+
+    if len(non_identity) > num_qubits:
+        raise ValueError("Non-identity dic length cannot be larger than the number of qubits")
 
     else:
         for key in non_identity:
             identifier = non_identity[key]
             # check whether identifier is allowed
-            if len(identifier) > 1:
-                raise ValueError("Only gates with Identifiers of length 1 are allowed")
+            if identifier not in ['X', 'Y', 'Z']:
+                raise ValueError("Only Pauli gates are allowed as identifiers")
             else:
-                pauli_string[key] = identifier
+                pauli_list[key] = identifier
 
-    return ''.join(pauli_string)
+    # create string from list
+    return ''.join(pauli_list)

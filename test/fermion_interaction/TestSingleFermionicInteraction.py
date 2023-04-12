@@ -37,3 +37,5 @@ class TestSingleFermionicInteraction(unittest.TestCase):
     def test_pauli_x_string_builder_wrong_index_order(self):
         with self.assertRaises(ValueError):
             build(3, 2, 1)
+
+
