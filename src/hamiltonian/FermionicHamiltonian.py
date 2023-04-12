@@ -11,8 +11,10 @@ from DoubleFermionInteractionHamiltonian import generate_2e_hamiltonian
 
 
 class FermionicHamiltonian:
+
+    num_qubits: int = 0
     # Hamiltonian object which will be stored as PauliSumOp
-    hamiltonian: PauliSumOp = None
+    hamiltonian_operator: PauliSumOp = None
 
     def fermionic_hamiltonian(self, molecule):
         """Creates the Fermionic excitation Hamiltonian for the given molecule.
@@ -31,25 +33,25 @@ class FermionicHamiltonian:
         single_electron_hamiltonian = generate_1e_hamiltonian(num_qubits, weights_1e)
         double_electron_hamiltonian = generate_2e_hamiltonian(num_qubits, weights_2e)
 
-        self.hamiltonian = single_electron_hamiltonian.add(double_electron_hamiltonian)
+        self.hamiltonian_operator = single_electron_hamiltonian.add(double_electron_hamiltonian)
 
     def get_hamiltonian(self) -> PauliSumOp:
         """Returns the PauliSumOp object"""
-        if self.hamiltonian is None:
+        if self.hamiltonian_operator is None:
             raise ValueError("Hamiltonian is NoneObject")
         else:
-            return self.hamiltonian
+            return self.hamiltonian_operator
 
     def get_matrix(self) -> ndarray:
         """Returns the matrix representation of the hamiltonian"""
-        if self.hamiltonian is None:
+        if self.hamiltonian_operator is None:
             raise ValueError("Hamiltonian is NoneObject")
         else:
-            return self.hamiltonian.to_matrix()
+            return self.hamiltonian_operator.to_matrix()
 
     def exponential(self) -> OperatorBase:
         """Returns a CircuitOperator equivalent to the exponentiation of the Hamiltonian"""
-        if self.hamiltonian is None:
+        if self.hamiltonian_operator is None:
             raise ValueError("Hamiltonian is NoneObject")
         else:
-            return self.hamiltonian.exp_i()
+            return self.hamiltonian_operator.exp_i()

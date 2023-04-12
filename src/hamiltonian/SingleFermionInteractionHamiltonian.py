@@ -19,10 +19,10 @@ from qiskit.quantum_info import SparsePauliOp
 from ..fermion_interaction.SingleFermionicInteraction import generate_diagonal_paulis, generate_offdiagonal_paulis
 
 
-def generate_1e_hamiltonian(num_qubits: int, weights: NDArray[Shape['2'], Float]):
+def generate_1e_hamiltonian(num_qubits: int, interaction_integrals: NDArray[Shape['2'], Float]):
     """Function which returns the full PauliSumOp for the whole single electron fermionic hamiltonian."""
-    diagonal_sparse_paulis = generate_diagonal_paulis(num_qubits, weights)
-    offdiagonal_sparse_paulis = generate_offdiagonal_paulis(num_qubits, weights)
+    diagonal_sparse_paulis = generate_diagonal_paulis(num_qubits, interaction_integrals)
+    offdiagonal_sparse_paulis = generate_offdiagonal_paulis(num_qubits, interaction_integrals)
 
     complete_sparse_paulis = SparsePauliOp.sum([diagonal_sparse_paulis, offdiagonal_sparse_paulis])
 
