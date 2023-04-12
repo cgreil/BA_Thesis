@@ -40,7 +40,6 @@ def generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray[
     pauli_list = []
     coeffs = []
 
-    coeff_index = 0
 
     # iterate over combinations where i < j_builder
     for j in range(num_qubits):
@@ -48,9 +47,9 @@ def generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray[
             if i == j:
                 # equal to a diagonal element
                 continue
-            # add coefficient
-            coeffs[coeff_index] = -(1 / 2) * interaction_integrals[i, j]
-            coeff_index = coeff_index + 1
+            # add coefficient twice, since two strings are added
+            coeff = - (1 / 2) * interaction_integrals[i, j]
+            coeffs.extend([coeff, coeff])
 
             pauli_X_string = _pauli_X_string_builder(num_qubits, i, j)
             pauli_Y_string = _pauli_Y_string_builder(i, j, num_qubits)
