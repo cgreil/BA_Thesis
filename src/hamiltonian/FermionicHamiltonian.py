@@ -6,8 +6,8 @@ Hamiltonian parts are considered.
 from nptyping import NDArray, Float, Shape, ndarray
 from qiskit.opflow import PauliSumOp, OperatorBase
 
-from SingleElectronHamiltonian import generate_1e_hamiltonian
-from DoubleElectronHamiltonian import generate_2e_hamiltonian
+from SingleFermionInteractionHamiltonian import generate_1e_hamiltonian
+from DoubleFermionInteractionHamiltonian import generate_2e_hamiltonian
 
 
 class FermionicHamiltonian:
