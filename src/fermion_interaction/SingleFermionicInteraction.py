@@ -77,6 +77,11 @@ def _pauli_X_string_builder(num_qubits: int, i: int, j: int):
         Z iff qubit index i < k < j
         I otherwise
     """
+    if j < i:
+        raise ValueError("first index value has to be lower than the second")
+
+    if i == j:
+        raise ValueError("Position of X Paulis cannot be equal")
 
     pauli_dict = {i: 'X'}
     for k in range(i + 1, j):
