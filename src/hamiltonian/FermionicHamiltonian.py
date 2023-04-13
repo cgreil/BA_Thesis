@@ -3,11 +3,14 @@ In this current approximation, single-electron-interaction hamiltonian and doubl
 Hamiltonian parts are considered.
  """
 
+from pyscf.gto import Mole
+
 from nptyping import NDArray, Float, Shape
 from qiskit.opflow import PauliSumOp, OperatorBase
 
 from SingleFermionInteractionHamiltonian import generate_1e_hamiltonian
 from DoubleFermionInteractionHamiltonian import generate_2e_hamiltonian
+from ..electron_integrals.BeH2Integrals import BeH2Integrals
 
 
 class FermionicHamiltonian:
@@ -21,17 +24,23 @@ class FermionicHamiltonian:
     def __init__(self, num_qubits: int):
         self.num_qubits = num_qubits
         # invoke hamiltonian generation
-        # TODO: invoke integration
-        self._generate_hamiltonian_operator(self.num_qubits, None, None)
+        self.fermionic_hamiltonian(self.num_qubits)
 
-    def fermionic_hamiltonian(self, molecule):
+    def fermionic_hamiltonian(self, num_qubits: int):
         """Creates the Fermionic excitation Hamiltonian for the given molecule.
         Will retrieve the necessary basis elements from basis set exchange,
         calculate the interaction integrals, compute the full excitation hamiltonian
         and return it.
-        TODO: Parse Molecule and invoke Integration
+
+        Invoked at __init__ time, but is idempotent and can be reinvoked arbitrarily
         """
-        pass
+        # calculate integrals using dedicated class, unpack 2-tuple
+        eri1_matrix, eri2_matrix = BeH2Integrals.get_integral_matrices()
+        self.single_interaction_weights = eri1_matrix
+        self.double_interaction_weights = eri2_matrix
+
+        # invoke generation of hamiltonian
+        self._generate_hamiltonian_operator(num_qubits)
 
     def get_hamiltonian(self) -> PauliSumOp:
         """Returns the PauliSumOp object"""
@@ -54,11 +63,11 @@ class FermionicHamiltonian:
         else:
             return self.hamiltonian_operator.exp_i()
 
-    def _generate_hamiltonian_operator(self, num_qubits: int, weights_1e: NDArray[Shape['2'], Float],
-                                       weights_2e: NDArray[Shape['4'], Float]):
+    def _generate_hamiltonian_operator(self, num_qubits: int):
         """From the number of qubits and the weight matrices for the respective interactions, form the hamiltonian
         and return it as qiskit PauliSumOp data structure."""
-        single_electron_hamiltonian = generate_1e_hamiltonian(num_qubits, weights_1e)
-        double_electron_hamiltonian = generate_2e_hamiltonian(num_qubits, weights_2e)
+
+        single_electron_hamiltonian = generate_1e_hamiltonian(num_qubits, self.single_interaction_weights)
+        double_electron_hamiltonian = generate_2e_hamiltonian(num_qubits, self.double_interaction_weights)
 
         self.hamiltonian_operator = single_electron_hamiltonian.add(double_electron_hamiltonian)

@@ -78,4 +78,3 @@ class BeH2Integrals:
                         matrix[N * p + r][N * q + s] = array[p][q][r][s]
         return matrix
 
-
