@@ -16,6 +16,12 @@ class FermionicHamiltonian:
     # Hamiltonian object which will be stored as PauliSumOp
     hamiltonian_operator: PauliSumOp = None
 
+    # constructor
+    def __init__(self, num_qubits: int):
+        self.num_qubits = num_qubits
+        # invoke hamiltonian generation
+        self._generate_hamiltonian_operator(self.num_qubits, None, None)
+
     def fermionic_hamiltonian(self, molecule):
         """Creates the Fermionic excitation Hamiltonian for the given molecule.
         Will retrieve the necessary basis elements from basis set exchange,
@@ -25,9 +31,10 @@ class FermionicHamiltonian:
         """
         pass
 
+
     # TODO: Set private later
-    def calculate_hamiltonian(self, num_qubits: int, weights_1e: NDArray[Shape['2'], Float],
-                              weights_2e: NDArray[Shape['4'], Float]):
+    def _generate_hamiltonian_operator(self, num_qubits: int, weights_1e: NDArray[Shape['2'], Float],
+                                       weights_2e: NDArray[Shape['4'], Float]):
         """From the number of qubits and the weight matrices for the respective interactions, form the hamiltonian
         and return it as qiskit PauliSumOp data structure."""
         single_electron_hamiltonian = generate_1e_hamiltonian(num_qubits, weights_1e)

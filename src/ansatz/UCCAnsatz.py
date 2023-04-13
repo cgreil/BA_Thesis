@@ -13,14 +13,18 @@ class UCCAnsatz:
     # UCC Object stored as PauliSumOp
     ansatz_operator: PauliSumOp = None
 
+    def __init__(self, num_qubits: int):
+        self.num_qubits = num_qubits
+        self._generate_ansatz_operator()
 
-    def generate_ansatz(self, num_qubits: int):
+
+    def _generate_ansatz_operator(self):
         """Creates the necessary random initialization weights, invokes the operator creation."""
-        initial_2d_weights = generate_random_2dim(num_qubits)
-        initial_4d_weights = generate_random_4dim(num_qubits)
+        initial_2d_weights = generate_random_2dim(self.num_qubits)
+        initial_4d_weights = generate_random_4dim(self.num_qubits)
 
-        single_interaction_part = generate_1e_ansatz_part(num_qubits, initial_2d_weights)
-        double_interaction_part = generate_2e_ansatz_part(num_qubits, initial_4d_weights)
+        single_interaction_part = generate_1e_ansatz_part(self.num_qubits, initial_2d_weights)
+        double_interaction_part = generate_2e_ansatz_part(self.num_qubits, initial_4d_weights)
 
         self.ansatz_operator = single_interaction_part.add(double_interaction_part)
 
