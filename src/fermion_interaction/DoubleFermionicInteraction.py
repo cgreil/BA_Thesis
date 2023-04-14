@@ -69,7 +69,7 @@ def _pauli_quadra_term_builder(num_qubits: int, positions: List[int], paulis='II
     return pauli_string_from_dict(num_qubits, pauli_dict)
 
 
-def generate_diagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Shape['4'], Float]):
+def generate_diagonal_paulis(num_qubits: int, interaction_weights: NDArray[Shape['4'], Float]):
     """Function which generates the Sum of Pauli strings which results off the mapping
     of the diagonal elements of the Two electron fermionic interaction Hamiltonian.
     Diagonal in this sense refers to the situation that for an index set ijkl, pairwaise indices
@@ -80,13 +80,12 @@ def generate_diagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Sha
     # initialize pauli and coeff lists
     pauli_list = []
     coeffs = []
-    coeff_index = 0
 
     for j in range(num_qubits):
         for i in range(j):
             # retrieve correct coefficient
-            coeffs[coeff_index] = (1 / 4) * interaction_integrals[i, j, i, j]
-            coeff_index = coeff_index + 1
+            # append the coeff 4 times because there are 4 strings being added
+            coeffs.extend([(1 / 4) * interaction_weights[i, j, i, j] for _ in range(4)])
 
             pauli_identity_string = _identity_string_builder(num_qubits)
             pauli_Zi_string = _pauli_single_Z_string_builder(num_qubits, i)
@@ -100,7 +99,7 @@ def generate_diagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Sha
     return SparsePauliOp(pauli_list, coeffs=np.array(coeffs))
 
 
-def generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Shape['4'], Float]):
+def generate_offdiagonal_paulis(num_qubits: int, interaction_weights: NDArray[Shape['4'], Float]):
     """Function which creates the Sum of Pauli strings which results from the mapping of the offdiagonal elements
     of the two electron fermionic interaction Hamiltonian.
 
@@ -131,7 +130,7 @@ def generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray[
                     # Determine the ordering and from it, determine the result of the levi-citavi epsilon
                     ordering = determine_ordering(index_dict)
                     # - 1/8 and the l-c-epsilon stem from the perservation of asymmetry
-                    coeff = (-1) * (1 / 8) * levi_civita_epsilon(ordering) * interaction_integrals[i, j, k, l]
+                    coeff = (-1) * (1 / 8) * levi_civita_epsilon(ordering) * interaction_weights[i, j, k, l]
 
                     # Calculate the full pauli string for a single interaction
                     pauli_string = _build_24_term_string(num_qubits, interaction_group, [i, j, k, l],
@@ -153,7 +152,9 @@ def _build_24_term_string(num_qubits: int, interaction_group: InteractionGroup, 
     positions = _determine_positions(interaction_group, pauli_indices)
     substrings = []
 
-    for term_index in range(DoubleElectronInteractionData.get_number_of_terms()):
+    num_terms = DoubleElectronInteractionData.get_number_of_terms()
+
+    for term_index in range(num_terms):
         sign = DoubleElectronInteractionData.get_sign(interaction_group, term_index)
         term = _pauli_quadra_term_builder(num_qubits, positions,
                                           DoubleElectronInteractionData.get_pauli_list()[term_index])
