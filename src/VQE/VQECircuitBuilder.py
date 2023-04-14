@@ -9,10 +9,9 @@ from qiskit import QuantumCircuit
 from ..hamiltonian.FermionicHamiltonian import FermionicHamiltonian
 from ..ansatz.UCCAnsatz import UCCAnsatz
 
+
 class VQECircuit:
-
-    """Class which includes static methods that allow to build the quantum VQE for the """
-
+    """Class which includes static methods that provide the circuit creation functionality for the VQE"""
 
     @staticmethod
     def build_hamiltonian_circuit(self, num_qubits):
@@ -31,7 +30,13 @@ class VQECircuit:
         """
         # note that qiskit is uses little endian notation, i.e. for example the lowest orbitals are
         # |000111> where the rightmost qubit would have index 0
-        pass
+        if num_qubits < num_occupated:
+            raise ValueError("Cannot have more occupated orbitals than qubits to represent them")
+
+        num_zero = num_qubits - num_occupated
+        qc = QuantumCircuit(num_qubits)
+        qc.x(qubit=range(num_zero+1, num_qubits))
+        return qc
 
 
 
@@ -40,4 +45,4 @@ class VQECircuit:
         """Creates the Ansatz object for num_qubits, stores the operator"""
         UCCAnsatz(self.num_qubits)
         ucc_ansatz = UCCAnsatz.get_ansatz()
-        
+
