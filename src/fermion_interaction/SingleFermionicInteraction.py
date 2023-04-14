@@ -12,13 +12,12 @@ def generate_diagonal_paulis(num_qubits: int, interaction_integrals: NDArray[Sha
     pauli_list = []
     coeffs = []
 
-    assert(num_qubits > 0)
-    assert(interaction_integrals.shape == (num_qubits, num_qubits))
-
+    assert (num_qubits > 0)
+    assert (interaction_integrals.shape == (num_qubits, num_qubits))
 
     for i in range(num_qubits):
         # store coeff
-        coeff = (1/2) * interaction_integrals[i, i]
+        coeff = (1 / 2) * interaction_integrals[i, i]
         # append coeff twice, since for every diagonal element there will be two pauli strings added
         coeffs.extend([coeff, coeff])
 
@@ -40,8 +39,8 @@ def generate_offdiagonal_paulis(num_qubits: int, interaction_integrals: NDArray[
     pauli_list = []
     coeffs = []
 
-    assert(num_qubits > 0)
-    assert(interaction_integrals.shape == (num_qubits, num_qubits))
+    assert (num_qubits > 0)
+    assert (interaction_integrals.shape == (num_qubits, num_qubits))
 
     # iterate over combinations where i < j_builder
     for j in range(num_qubits):
