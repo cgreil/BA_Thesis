@@ -6,6 +6,8 @@ Builds all necessary operators, transforms it to circuits and appends it togethe
 from qiskit.opflow import CircuitOp
 from qiskit import QuantumCircuit
 
+from nptyping import NDArray
+
 from ..hamiltonian.FermionicHamiltonian import FermionicHamiltonian
 from ..ansatz.UCCAnsatz import UCCAnsatz
 
@@ -35,14 +37,12 @@ class VQECircuit:
 
         num_zero = num_qubits - num_occupated
         qc = QuantumCircuit(num_qubits)
-        qc.x(qubit=range(num_zero+1, num_qubits))
+        qc.x(qubit=range(num_zero + 1, num_qubits))
         return qc
 
-
-
     @staticmethod
-    def build_kUCC_ansatz_circuit(self):
+    def build_kUCC_ansatz_circuit(self, num_qubits: int, eri1_ansatz_weights: NDArray, eri2_ansatz_weights: NDArray):
         """Creates the Ansatz object for num_qubits, stores the operator"""
-        UCCAnsatz(self.num_qubits)
+        UCCAnsatz(num_qubits, eri1_ansatz_weights, eri2_ansatz_weights)
         ucc_ansatz = UCCAnsatz.get_ansatz()
-
+        return ucc_ansatz.exp_i().to_circuit_op()
