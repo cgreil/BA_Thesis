@@ -14,6 +14,7 @@ from ..electron_integrals.BeH2Integrals import BeH2Integrals
 
 
 class FermionicHamiltonian:
+
     num_qubits: int = 0
     # Hamiltonian object which will be stored as PauliSumOp
     hamiltonian_operator: PauliSumOp = None
@@ -24,9 +25,9 @@ class FermionicHamiltonian:
     def __init__(self, num_qubits: int):
         self.num_qubits = num_qubits
         # invoke hamiltonian generation
-        self.fermionic_hamiltonian(self.num_qubits)
+        self.fermionic_hamiltonian()
 
-    def fermionic_hamiltonian(self, num_qubits: int):
+    def fermionic_hamiltonian(self):
         """Creates the Fermionic excitation Hamiltonian for the given molecule.
         Will retrieve the necessary basis elements from basis set exchange,
         calculate the interaction integrals, compute the full excitation hamiltonian
@@ -40,7 +41,7 @@ class FermionicHamiltonian:
         self.double_interaction_weights = eri2_matrix
 
         # invoke generation of hamiltonian
-        self._generate_hamiltonian_operator(num_qubits)
+        self._generate_hamiltonian_operator()
 
     def get_hamiltonian(self) -> PauliSumOp:
         """Returns the PauliSumOp object"""
@@ -63,11 +64,11 @@ class FermionicHamiltonian:
         else:
             return self.hamiltonian_operator.exp_i()
 
-    def _generate_hamiltonian_operator(self, num_qubits: int):
+    def _generate_hamiltonian_operator(self):
         """From the number of qubits and the weight matrices for the respective interactions, form the hamiltonian
         and return it as qiskit PauliSumOp data structure."""
 
-        single_electron_hamiltonian = generate_1e_hamiltonian(num_qubits, self.single_interaction_weights)
-        double_electron_hamiltonian = generate_2e_hamiltonian(num_qubits, self.double_interaction_weights)
+        single_electron_hamiltonian = generate_1e_hamiltonian(self.num_qubits, self.single_interaction_weights)
+        double_electron_hamiltonian = generate_2e_hamiltonian(self.num_qubits, self.double_interaction_weights)
 
         self.hamiltonian_operator = single_electron_hamiltonian.add(double_electron_hamiltonian)

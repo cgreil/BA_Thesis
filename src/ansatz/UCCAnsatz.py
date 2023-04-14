@@ -13,6 +13,7 @@ class UCCAnsatz:
     # UCC Object stored as PauliSumOp
     ansatz_operator: PauliSumOp = None
 
+
     def __init__(self, num_qubits: int):
         self.num_qubits = num_qubits
         self._generate_ansatz_operator()
