@@ -3,7 +3,6 @@ Builds all necessary operators, transforms it to circuits and appends it togethe
 
 """
 
-from qiskit.opflow import CircuitOp
 from qiskit import QuantumCircuit
 
 from nptyping import NDArray
@@ -12,14 +11,14 @@ from ..hamiltonian.FermionicHamiltonian import FermionicHamiltonian
 from ..ansatz.UCCAnsatz import UCCAnsatz
 
 
-class VQECircuit:
+class VQECircuitBuilder:
     """Class which includes static methods that provide the circuit creation functionality for the VQE"""
 
     @staticmethod
-    def build_hamiltonian_circuit(self, num_qubits):
+    def build_hamiltonian_circuit(num_qubits):
         """Creates the hamiltonian class for num_qubits, stores the operator"""
-        FermionicHamiltonian(num_qubits)
-        hamiltonian_operator = FermionicHamiltonian.get_hamiltonian(num_qubits)
+        hamiltonian = FermionicHamiltonian(num_qubits)
+        hamiltonian_operator = hamiltonian.get_hamiltonian()
 
         return hamiltonian_operator.exp_i().to_circuit_op()
 
@@ -42,8 +41,8 @@ class VQECircuit:
         return qc
 
     @staticmethod
-    def build_kUCC_ansatz_circuit(self, num_qubits: int, eri1_ansatz_weights: NDArray, eri2_ansatz_weights: NDArray):
+    def build_kUCC_ansatz_circuit(num_qubits: int, eri1_ansatz_weights: NDArray, eri2_ansatz_weights: NDArray):
         """Creates the Ansatz object for num_qubits, stores the operator"""
-        UCCAnsatz(num_qubits, eri1_ansatz_weights, eri2_ansatz_weights)
-        ucc_ansatz = UCCAnsatz.get_ansatz()
+        ansatz = UCCAnsatz(num_qubits, eri1_ansatz_weights, eri2_ansatz_weights)
+        ucc_ansatz = ansatz.get_ansatz()
         return ucc_ansatz.exp_i().to_circuit_op()
