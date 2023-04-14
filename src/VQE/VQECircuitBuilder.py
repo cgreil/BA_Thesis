@@ -20,10 +20,11 @@ class VQECircuit:
         """Creates the hamiltonian class for num_qubits, stores the operator"""
         FermionicHamiltonian(num_qubits)
         hamiltonian_operator = FermionicHamiltonian.get_hamiltonian(num_qubits)
+
         return hamiltonian_operator.exp_i().to_circuit_op()
 
     @staticmethod
-    def build_reference_state_circuit(num_qubits: int, num_occupated: int):
+    def build_reference_state_circuit(num_qubits: int, num_occupated: int) -> QuantumCircuit:
         """For a VQE with num_qubits qubits (corresponding to the number of orbitals)
         and an integer num_populated, build a VQE that will apply X gates to the num_occupated
         qubits with the lowest bit significance.
