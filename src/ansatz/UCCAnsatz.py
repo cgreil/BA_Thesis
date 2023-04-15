@@ -7,20 +7,24 @@ from qiskit.quantum_info import SparsePauliOp
 
 from RandomWeightGenerator import generate_random_2dim, generate_random_4dim
 from InteractionAnsatz import generate_1e_ansatz_part, generate_2e_ansatz_part
-class UCCAnsatz:
 
+
+class UCCAnsatz:
     num_qubits: int = 0
     # UCC Object stored as PauliSumOp
     ansatz_operator: PauliSumOp = None
+    single_interaction_weights: NDArray = None
+    double_interaction_weights: NDArray = None
 
+    def __init__(self, num_qubits: int, eri1_weights: NDArray, eri2_weights: NDArray):
+        self.num_qubits = num_qubits
+        self._generate_ansatz_operator()
+        self.single_interaction_weights = eri1_weights
+        self.double_interaction_weights = eri2_weights
 
-    def generate_ansatz(self, num_qubits: int):
-        """Creates the necessary random initialization weights, invokes the operator creation."""
-        initial_2d_weights = generate_random_2dim(num_qubits)
-        initial_4d_weights = generate_random_4dim(num_qubits)
-
-        single_interaction_part = generate_1e_ansatz_part(num_qubits, initial_2d_weights)
-        double_interaction_part = generate_2e_ansatz_part(num_qubits, initial_4d_weights)
+    def _generate_ansatz_operator(self):
+        single_interaction_part = generate_1e_ansatz_part(self.num_qubits, self.single_interaction_weights)
+        double_interaction_part = generate_2e_ansatz_part(self.num_qubits, self.double_interaction_weights)
 
         self.ansatz_operator = single_interaction_part.add(double_interaction_part)
 

@@ -19,6 +19,9 @@ def determine_ordering(index_dict: Dict[str, int]):
     As an example, if list[3] = 2, it means that the 4th(zero-indexed) entry of the dict
     has the second-largest value.
     """
+    if index_dict is None:
+        raise ValueError("Index Dict cannot be NoneObject")
+
     sorted_dict = _sort_dict_by_values(index_dict)
     # Notice that this index_list [a, b, c, ... ] corresponds to the assignments alpha = a, beta = b, gamma = c, ...
     # within the paper
@@ -31,6 +34,7 @@ def determine_ordering(index_dict: Dict[str, int]):
         position = list(sorted_dict.keys()).index(elem)
         ordering.append(position)
 
+    # ordering is of form [pos_i, pos_j, ...] where the pos elements are the respective positions
     return ordering
 
 
