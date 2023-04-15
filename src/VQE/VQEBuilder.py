@@ -17,7 +17,7 @@ class VQEBuilder:
     """Class which includes static methods that provide the circuit creation functionality for the VQE"""
 
     @staticmethod
-    def build_hamiltonian_circuit(self, num_qubits):
+    def build_hamiltonian_operator(self, num_qubits):
         """Creates the hamiltonian class for num_qubits, stores the operator"""
         hamiltonian = FermionicHamiltonian(num_qubits)
         hamiltonian_operator = hamiltonian.get_hamiltonian()
@@ -25,7 +25,7 @@ class VQEBuilder:
         return hamiltonian_operator.exp_i()
 
     @staticmethod
-    def build_reference_state_circuit(num_qubits: int, num_occupied: int):
+    def build_reference_state_operator(num_qubits: int, num_occupied: int):
         """For a VQE with num_qubits qubits (corresponding to the number of orbitals)
         and an integer num_populated, build a VQE that will apply X gates to the num_occupated
         qubits with the lowest bit significance.
@@ -41,7 +41,7 @@ class VQEBuilder:
         return ReferenceState.reference_operator
 
     @staticmethod
-    def build_kUCC_ansatz_circuit(self, num_qubits: int, eri1_ansatz_weights: NDArray, eri2_ansatz_weights: NDArray):
+    def build_kUCC_ansatz_operator(self, num_qubits: int, eri1_ansatz_weights: NDArray, eri2_ansatz_weights: NDArray):
         """Creates the Ansatz object for num_qubits, stores the operator"""
         ansatz = UCCAnsatz(num_qubits, eri1_ansatz_weights, eri2_ansatz_weights)
         ucc_ansatz = ansatz.get_ansatz()
