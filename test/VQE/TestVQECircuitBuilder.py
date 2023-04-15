@@ -10,7 +10,7 @@ from src.ansatz.RandomWeightGenerator import *
 
 class TestVQECircuitBuilder(unittest.TestCase):
     # testvariables
-    num_qubits = 14
+    num_qubits = 10
     eri1 = generate_random_2dim(num_qubits)
     eri2 = generate_random_4dim(num_qubits)
 

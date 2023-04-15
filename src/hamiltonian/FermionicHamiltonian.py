@@ -68,7 +68,14 @@ class FermionicHamiltonian:
         """From the number of qubits and the weight matrices for the respective interactions, form the hamiltonian
         and return it as qiskit PauliSumOp data structure."""
 
-        single_electron_hamiltonian = generate_1e_hamiltonian(self.num_qubits, self.single_interaction_weights)
-        double_electron_hamiltonian = generate_2e_hamiltonian(self.num_qubits, self.double_interaction_weights)
+        # TODO: Remove
+        import numpy as np
+        num_test = 10
+        single_qubit_weights = np.random.random((num_test,num_test))
+        double_qubit_weights = np.random.random((num_test, num_test, num_test, num_test))
+
+
+        single_electron_hamiltonian = generate_1e_hamiltonian(self.num_qubits, single_qubit_weights)
+        double_electron_hamiltonian = generate_2e_hamiltonian(self.num_qubits, double_qubit_weights)
 
         self.hamiltonian_operator = single_electron_hamiltonian.add(double_electron_hamiltonian)

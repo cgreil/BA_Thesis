@@ -20,7 +20,8 @@ class VQECircuitBuilder:
         hamiltonian = FermionicHamiltonian(num_qubits)
         hamiltonian_operator = hamiltonian.get_hamiltonian()
 
-        return hamiltonian_operator.exp_i().to_circuit_op()
+        #return hamiltonian_operator.exp_i().to_circuit_op()
+        return hamiltonian_operator.exp_i()
 
     @staticmethod
     def build_reference_state_circuit(num_qubits: int, num_occupated: int) -> QuantumCircuit:
@@ -45,4 +46,5 @@ class VQECircuitBuilder:
         """Creates the Ansatz object for num_qubits, stores the operator"""
         ansatz = UCCAnsatz(num_qubits, eri1_ansatz_weights, eri2_ansatz_weights)
         ucc_ansatz = ansatz.get_ansatz()
-        return ucc_ansatz.exp_i().to_circuit_op()
+        #return ucc_ansatz.exp_i().to_circuit_op()
+        return ucc_ansatz.exp_i()
