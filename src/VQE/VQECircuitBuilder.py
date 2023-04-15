@@ -9,6 +9,7 @@ from nptyping import NDArray
 
 from ..hamiltonian.FermionicHamiltonian import FermionicHamiltonian
 from ..ansatz.UCCAnsatz import UCCAnsatz
+from ..ansatz.ReferenceState import ReferenceState
 
 
 class VQECircuitBuilder:
@@ -24,7 +25,7 @@ class VQECircuitBuilder:
         return hamiltonian_operator.exp_i()
 
     @staticmethod
-    def build_reference_state_circuit(num_qubits: int, num_occupated: int) -> QuantumCircuit:
+    def build_reference_state_circuit(num_qubits: int, num_occupied: int):
         """For a VQE with num_qubits qubits (corresponding to the number of orbitals)
         and an integer num_populated, build a VQE that will apply X gates to the num_occupated
         qubits with the lowest bit significance.
@@ -33,13 +34,11 @@ class VQECircuitBuilder:
         """
         # note that qiskit is uses little endian notation, i.e. for example the lowest orbitals are
         # |000111> where the rightmost qubit would have index 0
-        if num_qubits < num_occupated:
+        if num_qubits < num_occupied:
             raise ValueError("Cannot have more occupated orbitals than qubits to represent them")
 
-        num_zero = num_qubits - num_occupated
-        qc = QuantumCircuit(num_qubits)
-        qc.x(qubit=range(num_zero + 1, num_qubits))
-        return qc
+        ReferenceState(num_qubits, num_occupied)
+        return ReferenceState.reference_operator
 
     @staticmethod
     def build_kUCC_ansatz_circuit(num_qubits: int, eri1_ansatz_weights: NDArray, eri2_ansatz_weights: NDArray):
