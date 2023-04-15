@@ -13,16 +13,16 @@ from ..ansatz.UCCAnsatz import UCCAnsatz
 from ..ansatz.ReferenceState import ReferenceState
 
 
-class VQECircuit:
+class VQEBuilder:
     """Class which includes static methods that provide the circuit creation functionality for the VQE"""
 
     @staticmethod
     def build_hamiltonian_circuit(self, num_qubits):
         """Creates the hamiltonian class for num_qubits, stores the operator"""
-        FermionicHamiltonian(num_qubits)
-        hamiltonian_operator = FermionicHamiltonian.get_hamiltonian(num_qubits)
+        hamiltonian = FermionicHamiltonian(num_qubits)
+        hamiltonian_operator = hamiltonian.get_hamiltonian()
 
-        return hamiltonian_operator.exp_i().to_circuit_op()
+        return hamiltonian_operator.exp_i()
 
     @staticmethod
     def build_reference_state_circuit(num_qubits: int, num_occupied: int):
@@ -43,6 +43,6 @@ class VQECircuit:
     @staticmethod
     def build_kUCC_ansatz_circuit(self, num_qubits: int, eri1_ansatz_weights: NDArray, eri2_ansatz_weights: NDArray):
         """Creates the Ansatz object for num_qubits, stores the operator"""
-        UCCAnsatz(num_qubits, eri1_ansatz_weights, eri2_ansatz_weights)
-        ucc_ansatz = UCCAnsatz.get_ansatz()
-        return ucc_ansatz.exp_i().to_circuit_op()
+        ansatz = UCCAnsatz(num_qubits, eri1_ansatz_weights, eri2_ansatz_weights)
+        ucc_ansatz = ansatz.get_ansatz()
+        return ucc_ansatz.exp_i()
