@@ -12,6 +12,7 @@ from qiskit.opflow.state_fns import CircuitStateFn
 from src.ansatz.RandomWeightGenerator import generate_random_2dim, generate_random_4dim
 from src.VQE.VQEBuilder import *
 
+from molecule import AbstractMolecule
 
 class VQEObject:
     num_qubits: int
@@ -24,9 +25,10 @@ class VQEObject:
     exp_hamiltonian_op: OperatorBase = None
 
     # TODO: Wrap num_qubits, num_occupied, and all things specific to the molecule into a dedicated object
-    def __init__(self, num_qubits: int, num_occupied: int):
-        self.num_qubits = num_qubits
-        self.num_occupied = num_occupied
+    def __init__(self, molecule: AbstractMolecule):
+        # unpack molecule values
+        self.num_qubits = molecule.num_orbitals
+        self.num_occupied = molecule.num_electrons
 
         # generate reference op
         self.reference_operator = VQEBuilder.build_reference_state_operator(self.num_qubits, self.num_occupied)

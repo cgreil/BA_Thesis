@@ -22,7 +22,6 @@ class UCCAnsatz:
         self.double_interaction_weights = eri2_weights
         self._generate_ansatz_operator()
 
-
     def _generate_ansatz_operator(self):
         single_interaction_part = generate_1e_ansatz_part(self.num_qubits, self.single_interaction_weights)
         double_interaction_part = generate_2e_ansatz_part(self.num_qubits, self.double_interaction_weights)

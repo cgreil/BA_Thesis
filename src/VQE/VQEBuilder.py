@@ -12,14 +12,15 @@ from ..hamiltonian.FermionicHamiltonian import FermionicHamiltonian
 from ..ansatz.UCCAnsatz import UCCAnsatz
 from ..ansatz.ReferenceState import ReferenceState
 
+from molecule import AbstractMolecule
 
 class VQEBuilder:
     """Class which includes static methods that provide the circuit creation functionality for the VQE"""
 
     @staticmethod
-    def build_hamiltonian_operator(num_qubits):
+    def build_hamiltonian_operator(num_qubits, molecule: AbstractMolecule):
         """Creates the hamiltonian class for num_qubits, stores the operator"""
-        hamiltonian = FermionicHamiltonian(num_qubits)
+        hamiltonian = FermionicHamiltonian(num_qubits, molecule)
         hamiltonian_operator = hamiltonian.get_hamiltonian()
 
         return hamiltonian_operator
