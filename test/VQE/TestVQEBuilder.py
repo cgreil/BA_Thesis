@@ -7,6 +7,7 @@ from qiskit.opflow import PauliSumOp
 from qiskit.quantum_info import SparsePauliOp
 
 from src.VQE.VQEBuilder import VQEBuilder
+from src.molecule.BeH2 import BeH2
 
 
 class TestVQEBuilder(unittest.TestCase):
@@ -39,3 +40,9 @@ class TestVQEBuilder(unittest.TestCase):
         num_occupied = 8
         with self.assertRaises(ValueError):
             VQEBuilder.build_reference_state_operator(num_qubits, num_occupied)
+
+    def test_build_hamiltonian_op_sanity(self):
+        num_qubits = 14
+        beh2 = BeH2("Test", 14, 6)
+        print(VQEBuilder.build_hamiltonian_operator(num_qubits, beh2))
+        self.assertTrue(True)
