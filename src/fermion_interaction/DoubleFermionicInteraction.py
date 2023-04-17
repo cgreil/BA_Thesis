@@ -120,13 +120,13 @@ def generate_offdiagonal_paulis(num_qubits: int, interaction_weights: NDArray[Sh
                 continue
             for k in range(num_qubits):
                 for l in range(k):
-                    if l == k:
-                        # also equal to a diagonal element (up to index swapping)
-                        continue
-                    # use method shown in the paper to determine the case
-                    index_dict = {'i': i, 'j': j, 'l': l, 'k': k}
                     # determine the group of interaction pairs
                     interaction_group = determine_interaction_group(i, j, k, l)
+                    if interaction_group is InteractionGroup.SYMMETRY:
+                        continue
+
+                    # use method shown in the paper to determine the case
+                    index_dict = {'i': i, 'j': j, 'k': k, 'l': l}
                     # Determine the ordering and from it, determine the result of the levi-citavi epsilon
                     ordering = determine_ordering(index_dict)
                     # - 1/8 and the l-c-epsilon stem from the perservation of asymmetry
