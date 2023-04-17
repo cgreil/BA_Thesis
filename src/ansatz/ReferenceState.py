@@ -22,7 +22,7 @@ class ReferenceState:
     def _generate_ref_op(self):
         first_occupied = self.num_qubits - self.num_occupied
         op_dic = {k: 'X' for k in range(first_occupied, self.num_qubits)}
-        string = pauli_string_from_dict(op_dic)
+        string = pauli_string_from_dict(self.num_qubits, op_dic)
         sparse_op = SparsePauliOp(string)
         self.reference_operator = PauliSumOp(sparse_op)
 
