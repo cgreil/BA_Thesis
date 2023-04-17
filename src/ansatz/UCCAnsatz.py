@@ -5,8 +5,8 @@ from nptyping import NDArray
 from qiskit.opflow import PauliSumOp, OperatorBase
 from qiskit.quantum_info import SparsePauliOp
 
-from RandomWeightGenerator import generate_random_2dim, generate_random_4dim
-from InteractionAnsatz import generate_1e_ansatz_part, generate_2e_ansatz_part
+from src.ansatz.RandomWeightGenerator import generate_random_2dim, generate_random_4dim
+from src.ansatz.InteractionAnsatz import generate_1e_ansatz_part, generate_2e_ansatz_part
 
 
 class UCCAnsatz:

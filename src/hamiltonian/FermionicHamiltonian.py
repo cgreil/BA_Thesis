@@ -8,9 +8,9 @@ from pyscf.gto import Mole
 from nptyping import NDArray, Float, Shape
 from qiskit.opflow import PauliSumOp, OperatorBase
 
-from SingleFermionInteractionHamiltonian import generate_1e_hamiltonian
-from DoubleFermionInteractionHamiltonian import generate_2e_hamiltonian
-from ..molecule.AbstractMolecule import AbstractMolecule
+from src.hamiltonian.SingleFermionInteractionHamiltonian import generate_1e_hamiltonian
+from src.hamiltonian.DoubleFermionInteractionHamiltonian import generate_2e_hamiltonian
+from src.molecule.AbstractMolecule import AbstractMolecule
 
 
 class FermionicHamiltonian:
