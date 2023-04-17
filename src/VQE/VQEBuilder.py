@@ -38,8 +38,8 @@ class VQEBuilder:
         if num_qubits < num_occupied:
             raise ValueError("Cannot have more occupied orbitals than qubits to represent them")
 
-        ReferenceState(num_qubits, num_occupied)
-        return ReferenceState.get_ref_op()
+        reference = ReferenceState(num_qubits, num_occupied)
+        return reference.get_ref_op()
 
     @staticmethod
     def build_kUCC_ansatz_operator(num_qubits: int, eri1_ansatz_weights: NDArray, eri2_ansatz_weights: NDArray):

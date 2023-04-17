@@ -24,11 +24,13 @@ class VQEObject:
     exp_ansatz_op: OperatorBase = None
     exp_hamiltonian_op: OperatorBase = None
 
-    # TODO: Wrap num_qubits, num_occupied, and all things specific to the molecule into a dedicated object
+    molecule: AbstractMolecule = None
+
     def __init__(self, molecule: AbstractMolecule):
         # unpack molecule values
         self.num_qubits = molecule.num_orbitals
         self.num_occupied = molecule.num_electrons
+        self.molecule = molecule
 
         # generate reference op
         self.reference_operator = VQEBuilder.build_reference_state_operator(self.num_qubits, self.num_occupied)
@@ -36,11 +38,12 @@ class VQEObject:
         # generate ansatz op with random values
         eri1_weights = generate_random_2dim(self.num_qubits)
         eri2_weights = generate_random_4dim(self.num_qubits)
+        # TODO Parameterize Ansatz
         self.ansatz_operator = VQEBuilder.build_kUCC_ansatz_operator(self.num_qubits, eri1_weights, eri2_weights)
         self.exp_ansatz_op = self.ansatz_operator.exp_i()
 
         # generate hamiltonian op
-        self.hamiltonian_operator = VQEBuilder.build_hamiltonian_operator(self.num_qubits)
+        self.hamiltonian_operator = VQEBuilder.build_hamiltonian_operator(self.num_qubits, self.molecule)
         self.exp_hamiltonian_op = self.hamiltonian_operator.exp_i()
 
     def measure(self):
