@@ -14,6 +14,7 @@ from src.VQE.VQEBuilder import *
 
 from molecule import AbstractMolecule
 
+
 class VQEObject:
     num_qubits: int
     num_occupied: int

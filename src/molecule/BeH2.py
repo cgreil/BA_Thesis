@@ -6,21 +6,21 @@ import numpy as np
 from nptyping import NDArray, Shape, Complex
 from typing import Tuple
 
-from AbstractMolecule import AbstractMolecule
+from src.molecule.AbstractMolecule import AbstractMolecule
 
 
-class BeH2Integrals(AbstractMolecule):
+class BeH2(AbstractMolecule):
     """Class providing staticmethod needed for creation of integrals"""
 
     def __init__(self, name: str, num_orbitals: int, num_electrons: int):
-        super.name = name
-        super.num_orbitals = num_orbitals
-        super.num_electrons = num_electrons
+        self.name = name
+        self.num_orbitals = num_orbitals
+        self.num_electrons = num_electrons
 
     def get_integral_matrices(self) -> Tuple[NDArray, NDArray]:
         """Overwrites superclass method from AbstractMolecule"""
-        molecule = BeH2Integrals._pyscf_create_beh2()
-        integral_tuple = (BeH2Integrals._pyscf_1e_integrals(molecule), BeH2Integrals._pyscf_2e_integrals(molecule))
+        molecule = BeH2._pyscf_create_beh2()
+        integral_tuple = (BeH2._pyscf_1e_integrals(molecule), BeH2._pyscf_2e_integrals(molecule))
         return integral_tuple
 
     @staticmethod

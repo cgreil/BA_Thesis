@@ -10,10 +10,13 @@ def determine_interaction_group(i: int, j: int, k: int, l: int):
     elif i < l < k < j:
         return InteractionGroup.THIRD
     else:
-        raise ValueError("Erroneous order of indices")
+        return InteractionGroup.SYMMETRY
 
 
 class InteractionGroup(Enum):
     FIRST = 1
     SECOND = 2
     THIRD = 3
+    # Symmetry specifies the case where the interaction is already
+    # accounted for by a different ordering in the symmetry group
+    SYMMETRY = 4
