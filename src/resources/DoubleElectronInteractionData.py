@@ -25,4 +25,4 @@ class DoubleElectronInteractionData:
         term number. Specifically, the sign is in the lookup matrix at entry i,j where row i
         corresponds to the term number and interaction group j corresponds to the column"""
         # Notice that the enum interaction group has integer correspondence
-        return cls._sign_lookup_matrix[term_number][interaction_group.value]
+        return cls._sign_lookup_matrix[term_number][(interaction_group.value-1)]

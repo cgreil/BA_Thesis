@@ -1,4 +1,3 @@
-
 import pyscf
 from pyscf import gto
 from pyscf.gto.basis import parse_gaussian
@@ -7,33 +6,39 @@ import numpy as np
 from nptyping import NDArray, Shape, Complex
 from typing import Tuple
 
+from src.molecule.AbstractMolecule import AbstractMolecule
 
-class BeH2Integrals:
+
+class BeH2(AbstractMolecule):
     """Class providing staticmethod needed for creation of integrals"""
 
+    def __init__(self, name: str, num_orbitals: int, num_electrons: int):
+        self.name = name
+        self.num_orbitals = num_orbitals
+        self.num_electrons = num_electrons
 
-    @staticmethod
-    def get_integral_matrices() -> Tuple[NDArray, NDArray]:
-        molecule = BeH2Integrals._create_beh2()
-        integral_tuple = (BeH2Integrals._get_1e_integrals(molecule), BeH2Integrals._get_2e_integrals(molecule))
+    def get_integral_matrices(self) -> Tuple[NDArray, NDArray]:
+        """Overwrites superclass method from AbstractMolecule"""
+        molecule = BeH2._pyscf_create_beh2()
+        integral_tuple = (BeH2._pyscf_1e_integrals(molecule), BeH2._pyscf_2e_integrals(molecule))
         return integral_tuple
 
     @staticmethod
-    def _get_1e_integrals(molecule: gto.Mole):
+    def _pyscf_1e_integrals(molecule: gto.Mole):
         """Function to calculate the 1-electron integrals in PySCF and returning the respective values as NxN matrix
         for a given molecule"""
         h1e = molecule.intor("int1e_kin", aosym='s1') + molecule.intor("int1e_nuc", aosym='s1')
         return h1e
 
     @staticmethod
-    def _get_2e_integrals(molecule: gto.Mole):
+    def _pyscf_2e_integrals(molecule: gto.Mole):
         """Function to calculate the 2-electron integrals in PySCF and returning the respective values as NxN matrix
         for a given molecule"""
         h2e = molecule.intor("int2e", aosym='s1')
         return h2e
 
     @staticmethod
-    def _create_beh2():
+    def _pyscf_create_beh2():
         """Function to create the beh2 molecule as pyscf object
          using the MO basis defined in the gbs file"""
         molecule = gto.Mole()
@@ -60,7 +65,6 @@ class BeH2Integrals:
         # molecule.symmetry_subgroup = 'DooH'
         return molecule
 
-
     @staticmethod
     def _dim2_from_dim4(array: NDArray[Shape['4'], Complex]) -> NDArray[Shape['2'], Complex]:
         """Util function taking a NxNxNxN array and returning a N^2xN^2 array in the following scheme:
@@ -77,4 +81,3 @@ class BeH2Integrals:
                     for s in range(N):
                         matrix[N * p + r][N * q + s] = array[p][q][r][s]
         return matrix
-

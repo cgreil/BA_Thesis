@@ -5,8 +5,8 @@ from nptyping import NDArray
 from qiskit.opflow import PauliSumOp, OperatorBase
 from qiskit.quantum_info import SparsePauliOp
 
-from RandomWeightGenerator import generate_random_2dim, generate_random_4dim
-from InteractionAnsatz import generate_1e_ansatz_part, generate_2e_ansatz_part
+from src.ansatz.RandomWeightGenerator import generate_random_2dim, generate_random_4dim
+from src.ansatz.InteractionAnsatz import generate_1e_ansatz_part, generate_2e_ansatz_part
 
 
 class UCCAnsatz:
@@ -18,9 +18,9 @@ class UCCAnsatz:
 
     def __init__(self, num_qubits: int, eri1_weights: NDArray, eri2_weights: NDArray):
         self.num_qubits = num_qubits
-        self._generate_ansatz_operator()
         self.single_interaction_weights = eri1_weights
         self.double_interaction_weights = eri2_weights
+        self._generate_ansatz_operator()
 
     def _generate_ansatz_operator(self):
         single_interaction_part = generate_1e_ansatz_part(self.num_qubits, self.single_interaction_weights)

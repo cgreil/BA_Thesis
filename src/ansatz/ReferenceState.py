@@ -16,11 +16,13 @@ class ReferenceState:
     def __init__(self, num_qubits: int, num_occupied: int):
         self.num_qubits = num_qubits
         self.num_occupied = num_occupied
+        # call generate method
+        self._generate_ref_op()
 
-    def _generate_ref_op(self, num_qubits: int, num_occupied: int):
-        first_occupied = num_qubits - num_occupied
-        op_dic = {k: 'X' for k in range(first_occupied, num_qubits)}
-        string = pauli_string_from_dict(op_dic)
+    def _generate_ref_op(self):
+        first_occupied = self.num_qubits - self.num_occupied
+        op_dic = {k: 'X' for k in range(first_occupied, self.num_qubits)}
+        string = pauli_string_from_dict(self.num_qubits, op_dic)
         sparse_op = SparsePauliOp(string)
         self.reference_operator = PauliSumOp(sparse_op)
 
