@@ -12,8 +12,7 @@ from src.molecule.AbstractMolecule import AbstractMolecule
 class BeH2(AbstractMolecule):
     """Class providing staticmethod needed for creation of integrals"""
 
-    def __init__(self, name: str, num_orbitals: int, num_electrons: int):
-        self.name = name
+    def __init__(self, num_orbitals: int, num_electrons: int):
         self.num_orbitals = num_orbitals
         self.num_electrons = num_electrons
 
