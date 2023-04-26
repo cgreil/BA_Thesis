@@ -21,8 +21,8 @@ class FermionicHamiltonian:
     double_interaction_weights: NDArray[Shape['2'], Float]
 
     # constructor
-    def __init__(self, num_qubits: int, molecule: AbstractMolecule):
-        self.num_qubits = num_qubits
+    def __init__(self, molecule: AbstractMolecule):
+        self.num_qubits = molecule.num_orbitals
         # invoke hamiltonian generation
         self.fermionic_hamiltonian(molecule)
 
@@ -42,21 +42,21 @@ class FermionicHamiltonian:
         # invoke generation of hamiltonian
         self._generate_hamiltonian_operator()
 
-    def get_hamiltonian(self) -> PauliSumOp:
+    def get_hamiltonian_op(self) -> PauliSumOp:
         """Returns the PauliSumOp object"""
         if self.hamiltonian_operator is None:
             raise ValueError("Hamiltonian is NoneObject")
         else:
             return self.hamiltonian_operator
 
-    def get_matrix(self) -> NDArray:
+    def get_hamiltonian_matrix(self) -> NDArray:
         """Returns the matrix representation of the hamiltonian"""
         if self.hamiltonian_operator is None:
             raise ValueError("Hamiltonian is NoneObject")
         else:
             return self.hamiltonian_operator.to_matrix()
 
-    def exponential(self) -> OperatorBase:
+    def get_hamiltonian_exponential(self) -> OperatorBase:
         """Returns a CircuitOperator equivalent to the exponentiation of the Hamiltonian"""
         if self.hamiltonian_operator is None:
             raise ValueError("Hamiltonian is NoneObject")
