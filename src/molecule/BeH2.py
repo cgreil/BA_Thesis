@@ -44,8 +44,8 @@ class BeH2(AbstractMolecule):
         # geometry of the molecule
         molecule.atom = '''
             Be 0. 0. 0. 
-            H  0. 1. 0. 
-            H  0. 0. 1. 
+            H  0. 1.7 0. 
+            H  0. 0. 1.7 
             '''
         # B for Bohr referring to Bohr radius
         molecule.unit = 'B'

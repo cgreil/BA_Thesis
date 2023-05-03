@@ -20,7 +20,7 @@ class VQEBuilder:
     @staticmethod
     def build_hamiltonian_operator(num_qubits, molecule: AbstractMolecule):
         """Creates the hamiltonian class for num_qubits, stores the operator"""
-        hamiltonian = FermionicHamiltonian(num_qubits, molecule)
+        hamiltonian = FermionicHamiltonian(molecule)
         hamiltonian_operator = hamiltonian.get_hamiltonian_op()
 
         return hamiltonian_operator
