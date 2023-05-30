@@ -1,6 +1,7 @@
 from qiskit import QuantumCircuit, QuantumRegister
 from qiskit.circuit import Gate, ControlledGate
 from qiskit.opflow import PauliSumOp
+from qiskit.extensions.unitary import UnitaryGate
 
 
 class QPE:
@@ -49,6 +50,12 @@ class QPE:
         # Apply the Ansatz circuit onto the state register
         state_reg.compose(self.ansatzCircuit)
 
-        # Create Controlled Unitary from the unitary operator
-        #gate = Gate(self.unitaryOp, self.num_state_qubits)
-        #controlled_unitary = ControlledGate(,  )
+        # add circuits together
+        circuit = state_reg.tensor(readout_reg)
+
+        # Create Controlled Unitary from the unitary operator and apply to
+        controlled_op = UnitaryGate(self.unitaryOp).control()
+
+        # add controlled ops to circuit
+        for qubit_num in range(0, self.num_readout_qubits):
+            circuit.unitary(controlled_op, qubit_num)
