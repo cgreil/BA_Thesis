@@ -54,7 +54,7 @@ class H2(AbstractMolecule):
             #'Be': parse_gaussian.load(
             #    '/home/christoph/PycharmProjects/Ba_Thesis_Documents/src/resources/BeH2_basis_new.gbs', 'Be'),
             'H': parse_gaussian.load(
-                '/home/christoph/PycharmProjects/Ba_Thesis_Documents/src/resources/BeH2_basis_new.gbs', 'H')
+                '/home/christoph/PycharmProjects/Ba_Thesis_Documents/src/resources/H2.gbs', 'H')
         }
 
         molecule.spin = 0
